@@ -87,10 +87,20 @@ To Quit enter: {7}",
             7,
             0));
         }
-        //TODO
-        internal static int GetNumberOfMinuetsToChargeBattery()
+
+        internal static float GetNumberOfMinuetsToChargeBattery()
         {
-            throw new NotImplementedException();
+            float numberOfMinuets;
+
+            Console.WriteLine("Please enter number of minuets to charge the battery:");
+            bool parseSucceed = float.TryParse(Console.ReadLine(), out numberOfMinuets);
+            while (!parseSucceed)
+            {
+                Console.WriteLine("Wrong input! number of minuets to charge the battery should be a float, please insert valid input:");
+                parseSucceed = float.TryParse(Console.ReadLine(), out numberOfMinuets);
+            }
+
+            return numberOfMinuets;
         }
 
         internal static string GetVeichleLicenseNumberFromUser()

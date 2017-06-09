@@ -6,6 +6,7 @@ namespace Ex03.GarageLogic
 {
     //TODO Fix vehicle typo in all project
     public abstract class Veichle
+
     {
         private string m_ModelName;
         private string m_LicenceNumber;
