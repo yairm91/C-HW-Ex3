@@ -5,10 +5,9 @@ namespace Ex03.GarageLogic
 {
     internal class Electric : Energy
     {
+        private const string k_EnergyType = "Electric";
         private float m_TimeLeftOnBatteryInHours;
         private float m_MaxTimeInBatteryInHours;
-        private const string k_EnergyType = "Electric";
-       
 
         internal override void AddEnergy(Dictionary<string, object> i_ValuesToAddEnergy)
         {
@@ -23,8 +22,6 @@ namespace Ex03.GarageLogic
             {
                 m_TimeLeftOnBatteryInHours = tempNewValueOfBattery;
             }
-        }
-
-        
+        }       
     }
 }

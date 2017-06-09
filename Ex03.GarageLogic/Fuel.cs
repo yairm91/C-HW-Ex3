@@ -5,12 +5,11 @@ namespace Ex03.GarageLogic
 {
     internal class Fuel : Energy
     {
+        private const string k_EnergyType = "Fuel";
+        private const string k_FuelType = "FuelType";
         private eFuelType m_FuelType;
         private float m_AmountOfFuelInTankInLiters;
         private float m_MaxCapacityOfFuelTankInLiters;
-        private const string k_EnergyType = "Fuel";
-        private const string k_FuelType = "FuelType";
-
 
         internal enum eFuelType
         {
@@ -46,8 +45,6 @@ namespace Ex03.GarageLogic
             {
                 m_AmountOfFuelInTankInLiters = tempAmountOfFuelInTank;
             }
-
         }
-
     }
 }

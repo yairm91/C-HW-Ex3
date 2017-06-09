@@ -37,7 +37,9 @@
   <ItemGroup>
     <Compile Include="Bike.cs" />
     <Compile Include="Car.cs" />
-    <Compile Include="Electric.cs" />
+    <Compile Include="Electric.cs">
+      <ExcludeFromStyleCop>False</ExcludeFromStyleCop>
+    </Compile>
     <Compile Include="Energy.cs" />
     <Compile Include="Fuel.cs" />
     <Compile Include="Garage.cs" />
