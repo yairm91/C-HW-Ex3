@@ -19,6 +19,13 @@ namespace Ex03.GarageLogic
             Octan98
         }
 
+        public Fuel(float i_AmountOfFuelInTankInLiters, float i_MaxCapacityOfFuelTankInLiters, eFuelType i_FuelType)
+        {
+            m_AmountOfFuelInTankInLiters = i_AmountOfFuelInTankInLiters;
+            m_MaxCapacityOfFuelTankInLiters = i_MaxCapacityOfFuelTankInLiters;
+            m_FuelType = i_FuelType;
+        }
+
         internal override void AddEnergy(Dictionary<string, object> i_ValuesToAddEnergy)
         {
             float valueToAddToFuelTank = ValidateAndGetValueToAdd(i_ValuesToAddEnergy, k_EnergyType);

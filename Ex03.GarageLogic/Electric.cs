@@ -9,6 +9,12 @@ namespace Ex03.GarageLogic
         private float m_TimeLeftOnBatteryInHours;
         private float m_MaxTimeInBatteryInHours;
 
+        public Electric(float i_TimeLeftOnBatteryInHours, float i_MaxTimeInBatteryInHours)
+        {
+            m_TimeLeftOnBatteryInHours = i_TimeLeftOnBatteryInHours;
+            m_MaxTimeInBatteryInHours = i_MaxTimeInBatteryInHours;
+        }
+
         internal override void AddEnergy(Dictionary<string, object> i_ValuesToAddEnergy)
         {
             float valueToAddToBattery = ValidateAndGetValueToAdd(i_ValuesToAddEnergy, k_EnergyType);

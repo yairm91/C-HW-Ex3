@@ -7,11 +7,11 @@ namespace Ex03.GarageLogic
     internal class Bike : Veichle
     {    
         private eTypeOfLicence m_TypeOfLicence;
-        private int m_TankVolume;
+        private int m_EngineVolume;
 
         public int TankVolume
         {
-            get { return m_TankVolume; }
+            get { return m_EngineVolume; }
         }
 
         public eTypeOfLicence TypeOfLicence
@@ -21,7 +21,7 @@ namespace Ex03.GarageLogic
 
         internal Bike(
             eTypeOfLicence i_TypeOfLicence, 
-            int i_TankVolume, 
+            int i_EngineVolume, 
             string i_ModelName, 
             string i_LicenceNumber, 
             float i_PercentOfEnergyLeft, 
@@ -34,7 +34,7 @@ namespace Ex03.GarageLogic
                 i_EnergyType, 
                 i_Wheels)
         {
-            m_TankVolume = i_TankVolume;
+            m_EngineVolume = i_EngineVolume;
             m_TypeOfLicence = i_TypeOfLicence;
         }
 

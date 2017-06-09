@@ -6,13 +6,20 @@ namespace Ex03.GarageLogic
 {
     //TODO Fix vehicle typo in all project
     public abstract class Veichle
-
     {
         private string m_ModelName;
         private string m_LicenceNumber;
         private float m_PercentOfEnergyLeft;
         private Energy m_EnergyType;
         private List<Wheel> m_Wheels;
+
+        internal float PercentOfEnergyLeft
+        {
+            set
+            {
+                m_PercentOfEnergyLeft = value;
+            }
+        }
 
         internal Veichle(string i_ModelName, string i_LicenceNumber, float i_PercentOfEnergyLeft, Energy i_EnergyType, List<Wheel> i_Wheels)
         {
