@@ -4,7 +4,20 @@ using System.Text;
 
 namespace Ex03.GarageLogic
 {
-    class Garage
+    public class Garage
     {
+        List<Veichle> m_VeichlesinGarage;
+
+        // TODO implement the Garage empty constructor
+        public Garage()
+        {
+
+        }
+
+        // TODO - get Veichle in m_VeichlesinGarage by  LicenseNumber if not found return null
+        public Veichle GetVeichleByLicenseNumber(string veichleLicenseNumber)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

@@ -4,7 +4,13 @@ using System.Text;
 
 namespace Ex03.GarageLogic
 {
-    class Veichle
+    public class Veichle
     {
+
+        // TODO - full the air in all wheels to max capacity
+        public void inflateAirInWheelsToMaximum()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

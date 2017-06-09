@@ -5,7 +5,7 @@
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{3AD52131-61EB-448C-9EEA-FFAE72AF01AB}</ProjectGuid>
-    <OutputType>Library</OutputType>
+    <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Ex03.ConsoleUI</RootNamespace>
     <AssemblyName>Ex03.ConsoleUI</AssemblyName>
@@ -43,6 +43,7 @@
   <ItemGroup>
     <Compile Include="GarageInterface.cs" />
     <Compile Include="Program.cs" />
+    <Compile Include="ValueOutOfRangeException.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />
