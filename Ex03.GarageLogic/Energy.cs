@@ -1,10 +1,39 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace Ex03.GarageLogic
 {
-    class Energy
+    internal abstract class Energy
     {
+        private const string k_ValueType = "EnergyType";
+        private const string k_ValueToAddToBattery = "Value";
+
+        internal abstract void AddEnergy(Dictionary<string, object> i_ValuesToAddEnergy);
+
+        protected static float ValidateAndGetValueToAdd(Dictionary<string, object> i_ValuesToAddEnergy, string i_EnergyType)
+        {
+            object valueType;
+            bool didGetWork = i_ValuesToAddEnergy.TryGetValue(k_ValueType, out valueType);
+            if (!didGetWork)
+            {
+                throw new FormatException();
+            }
+
+            if (valueType.ToString() != i_EnergyType)
+            {
+                throw new ArgumentException();
+            }
+
+            object valueToAddObjectForm;
+            didGetWork = i_ValuesToAddEnergy.TryGetValue(k_ValueToAddToBattery, out valueToAddObjectForm);
+            if (!didGetWork)
+            {
+                throw new FormatException();
+            }
+
+            float valueToAddFloatForm = (float)valueToAddObjectForm;
+
+            return valueToAddFloatForm;
+        }
     }
 }

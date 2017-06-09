@@ -1,10 +1,53 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace Ex03.GarageLogic
 {
-    class Fuel
+    internal class Fuel : Energy
     {
+        private eFuelType m_FuelType;
+        private float m_AmountOfFuelInTankInLiters;
+        private float m_MaxCapacityOfFuelTankInLiters;
+        private const string k_EnergyType = "Fuel";
+        private const string k_FuelType = "FuelType";
+
+
+        internal enum eFuelType
+        {
+            Soler, 
+            Octan95,
+            Octan96,
+            Octan98
+        }
+
+        internal override void AddEnergy(Dictionary<string, object> i_ValuesToAddEnergy)
+        {
+            float valueToAddToFuelTank = ValidateAndGetValueToAdd(i_ValuesToAddEnergy, k_EnergyType);
+
+            object fuelTypeInObjectForm;
+            bool didGetWork = i_ValuesToAddEnergy.TryGetValue(k_FuelType, out fuelTypeInObjectForm);
+            if (!didGetWork)
+            {
+                throw new FormatException();
+            }
+
+            if(fuelTypeInObjectForm.ToString() != m_FuelType.ToString())
+            {
+                throw new ArgumentException();
+            }
+
+            float tempAmountOfFuelInTank = m_AmountOfFuelInTankInLiters + valueToAddToFuelTank;
+
+            if (tempAmountOfFuelInTank > m_MaxCapacityOfFuelTankInLiters)
+            {
+                throw new ArgumentException();
+            }
+            else
+            {
+                m_AmountOfFuelInTankInLiters = tempAmountOfFuelInTank;
+            }
+
+        }
+
     }
 }
