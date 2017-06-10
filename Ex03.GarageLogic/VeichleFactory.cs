@@ -38,34 +38,34 @@ namespace Ex03.GarageLogic
         internal const string k_TypeOfLicenceKey = "TypeOfLicence";
         internal const string k_EngineVolumeKey = "EngineVolume";
 
-        internal static Veichle CreateNewVeichle(ePossibleVeichleTypes veichleType, Dictionary<string, object> i_VeichleCharaterstic)
+        internal static Vehicle CreateNewVeichle(ePossibleVehicleTypes veichleType, Dictionary<string, object> i_VeichleCharaterstic)
         {
-            Veichle newVeichle;
+            Vehicle newVeichle;
             switch (veichleType)
             {
-                case ePossibleVeichleTypes.FuelBike:
+                case ePossibleVehicleTypes.FuelBike:
                     newVeichle = createNewBike(i_VeichleCharaterstic, v_UsesFuel);
                     break;
-                case ePossibleVeichleTypes.ElectricBike:
+                case ePossibleVehicleTypes.ElectricBike:
                     newVeichle = createNewBike(i_VeichleCharaterstic, !v_UsesFuel);
                     break;
-                case ePossibleVeichleTypes.FuelCar:
+                case ePossibleVehicleTypes.FuelCar:
                     newVeichle = createNewCar(i_VeichleCharaterstic, v_UsesFuel);
                     break;
-                case ePossibleVeichleTypes.ElectricCar:
+                case ePossibleVehicleTypes.ElectricCar:
                     newVeichle = createNewCar(i_VeichleCharaterstic, !v_UsesFuel);
                     break;
-                case ePossibleVeichleTypes.FuelTruck:
+                case ePossibleVehicleTypes.FuelTruck:
                     newVeichle = createNewTruck(i_VeichleCharaterstic, v_UsesFuel);
                     break;
                 default:
-                    throw new ArgumentException();
+                    throw new ArgumentException("No Such Veichle Type");
             }
 
             return newVeichle;
         }
 
-        private static Veichle createNewBike(Dictionary<string, object> i_VeichleCharaterstic, bool i_UsesFuel)
+        private static Vehicle createNewBike(Dictionary<string, object> i_VeichleCharaterstic, bool i_UsesFuel)
         {
             Energy energyType;
             if (i_UsesFuel)
@@ -89,14 +89,20 @@ namespace Ex03.GarageLogic
             return new Bike(typeOfLicence, engineVolume, modelName, licenceNumber, percentOfEnergyLeft, energyType, wheels);
         }
 
-        private static void getInputParamtersForBike(Dictionary<string, object> i_VeichleCharaterstic, out Bike.eTypeOfLicence o_TypeOfLicence, out int o_EngineVolume, out string o_ModelName, out string o_LicenceNumber, out float o_PercentOfEnergyLeft)
+        private static void getInputParamtersForBike(
+            Dictionary<string, object> i_VeichleCharaterstic, 
+            out Bike.eTypeOfLicence o_TypeOfLicence, 
+            out int o_EngineVolume,
+            out string o_ModelName, 
+            out string o_LicenceNumber,
+            out float o_PercentOfEnergyLeft)
         {
             o_TypeOfLicence = getTypeOfLicenceValueFromDict(i_VeichleCharaterstic, k_TypeOfLicenceKey);
             o_EngineVolume = getIntFromDict(i_VeichleCharaterstic, k_EngineVolumeKey);
-            getVeichleParameters(i_VeichleCharaterstic, out o_ModelName, out o_LicenceNumber, out o_PercentOfEnergyLeft);
+            getVehicleParameters(i_VeichleCharaterstic, out o_ModelName, out o_LicenceNumber, out o_PercentOfEnergyLeft);
         }
 
-        private static void getVeichleParameters(Dictionary<string, object> i_VeichleCharaterstic, out string o_ModelName, out string o_LicenceNumber, out float o_PercentOfEnergyLeft)
+        private static void getVehicleParameters(Dictionary<string, object> i_VeichleCharaterstic, out string o_ModelName, out string o_LicenceNumber, out float o_PercentOfEnergyLeft)
         {
             o_ModelName = getStringFromDict(i_VeichleCharaterstic, k_ModelNameKey);
             o_LicenceNumber = getStringFromDict(i_VeichleCharaterstic, k_LicenceNumberKey);
@@ -110,7 +116,7 @@ namespace Ex03.GarageLogic
             didGetWork = i_VeichleCharaterstic.TryGetValue(i_Key, out numberInObjectForm);
             if (!didGetWork)
             {
-                throw new FormatException();
+                throw new FormatException(string.Format("Wrong Dictionary Format, no {0} field", i_Key));
             }
 
             int numberInIntForm = (int)numberInObjectForm;
@@ -118,14 +124,14 @@ namespace Ex03.GarageLogic
             return numberInIntForm;
         }
 
-        private static Bike.eTypeOfLicence getTypeOfLicenceValueFromDict(Dictionary<string, object> i_VeichleCharaterstic, string i_Key)
+        private static Bike.eTypeOfLicence getTypeOfLicenceValueFromDict(Dictionary<string, object> i_VehicleCharaterstic, string i_Key)
         {
             bool didGetWork;
             object typeOfLicenceInObjectForm;
-            didGetWork = i_VeichleCharaterstic.TryGetValue(i_Key, out typeOfLicenceInObjectForm);
+            didGetWork = i_VehicleCharaterstic.TryGetValue(i_Key, out typeOfLicenceInObjectForm);
             if (!didGetWork)
             {
-                throw new FormatException();
+                throw new FormatException(string.Format("Wrong Dictionary Format, no {0} field", i_Key));
             }
 
             Bike.eTypeOfLicence typeOfLicence = (Bike.eTypeOfLicence) typeOfLicenceInObjectForm;
@@ -133,45 +139,51 @@ namespace Ex03.GarageLogic
             return typeOfLicence;
         }
 
-        private static Veichle createNewCar(Dictionary<string, object> i_VeichleCharaterstic, bool i_UsesFuel)
+        private static Vehicle createNewCar(Dictionary<string, object> i_VehicleCharaterstic, bool i_UsesFuel)
         {
             Energy energyType;
             if (i_UsesFuel)
             {
-                energyType = createEnergySource(i_VeichleCharaterstic, k_MaxTankSizeInCar, k_CarFuelType);
+                energyType = createEnergySource(i_VehicleCharaterstic, k_MaxTankSizeInCar, k_CarFuelType);
             }
             else
             {
-                energyType = createEnergySource(i_VeichleCharaterstic, k_MaxBatterySizeInCar);
+                energyType = createEnergySource(i_VehicleCharaterstic, k_MaxBatterySizeInCar);
             }
 
-            List<Wheel> wheels = createWheelsList(i_VeichleCharaterstic, k_NumberOfWheelsInCar, k_MaxAirPressureInCarWheel);
+            List<Wheel> wheels = createWheelsList(i_VehicleCharaterstic, k_NumberOfWheelsInCar, k_MaxAirPressureInCarWheel);
 
             Car.eNumberOfDoors numberOfDoors;
             Car.ePossibleCarColors carColor;
             float percentOfEnergyLeft;
             string modelName, licenceNumber;
 
-            getInputParamtersForCar(i_VeichleCharaterstic, out numberOfDoors, out carColor, out modelName, out licenceNumber, out percentOfEnergyLeft);
+            getInputParamtersForCar(i_VehicleCharaterstic, out numberOfDoors, out carColor, out modelName, out licenceNumber, out percentOfEnergyLeft);
 
             return new Car(carColor, numberOfDoors, modelName, licenceNumber, percentOfEnergyLeft, energyType, wheels);
         }
 
-        private static void getInputParamtersForCar(Dictionary<string, object> i_VeichleCharaterstic, out Car.eNumberOfDoors o_NumberOfDoors, out Car.ePossibleCarColors o_CarColor, out string o_ModelName, out string o_LicenceNumber, out float o_PercentOfEnergyLeft)
+        private static void getInputParamtersForCar(
+            Dictionary<string, object> i_VehicleCharaterstic, 
+            out Car.eNumberOfDoors o_NumberOfDoors, 
+            out Car.ePossibleCarColors o_CarColor, 
+            out string o_ModelName, 
+            out string o_LicenceNumber, 
+            out float o_PercentOfEnergyLeft)
         {
-            o_NumberOfDoors = getNumberOfDoorsValueFromDict(i_VeichleCharaterstic, k_NumberOfDoorsInCarKey);
-            o_CarColor = getCarColorValueFromDict(i_VeichleCharaterstic, k_CarColorKey);
-            getVeichleParameters(i_VeichleCharaterstic, out o_ModelName, out o_LicenceNumber, out o_PercentOfEnergyLeft);
+            o_NumberOfDoors = getNumberOfDoorsValueFromDict(i_VehicleCharaterstic, k_NumberOfDoorsInCarKey);
+            o_CarColor = getCarColorValueFromDict(i_VehicleCharaterstic, k_CarColorKey);
+            getVehicleParameters(i_VehicleCharaterstic, out o_ModelName, out o_LicenceNumber, out o_PercentOfEnergyLeft);
         }
 
-        private static Car.ePossibleCarColors getCarColorValueFromDict(Dictionary<string, object> i_VeichleCharaterstic, string i_Key)
+        private static Car.ePossibleCarColors getCarColorValueFromDict(Dictionary<string, object> i_VehicleCharaterstic, string i_Key)
         {
             bool didGetWork;
             object possibleCarColorInObjectForm;
-            didGetWork = i_VeichleCharaterstic.TryGetValue(i_Key, out possibleCarColorInObjectForm);
+            didGetWork = i_VehicleCharaterstic.TryGetValue(i_Key, out possibleCarColorInObjectForm);
             if (!didGetWork)
             {
-                throw new FormatException();
+                throw new FormatException(string.Format("Wrong Dictionary Format, no {0} field", i_Key));
             }
 
             Car.ePossibleCarColors carColor = (Car.ePossibleCarColors) possibleCarColorInObjectForm;
@@ -179,14 +191,14 @@ namespace Ex03.GarageLogic
             return carColor;
         }
 
-        private static Car.eNumberOfDoors getNumberOfDoorsValueFromDict(Dictionary<string, object> i_VeichleCharaterstic, string i_Key)
+        private static Car.eNumberOfDoors getNumberOfDoorsValueFromDict(Dictionary<string, object> i_VehicleCharaterstic, string i_Key)
         {
             bool didGetWork;
             object numberOfDoorsInObjectForm;
-            didGetWork = i_VeichleCharaterstic.TryGetValue(i_Key, out numberOfDoorsInObjectForm);
+            didGetWork = i_VehicleCharaterstic.TryGetValue(i_Key, out numberOfDoorsInObjectForm);
             if (!didGetWork)
             {
-                throw new FormatException();
+                throw new FormatException(string.Format("Wrong Dictionary Format, no {0} field", i_Key));
             }
 
             Car.eNumberOfDoors numberOfDoors = (Car.eNumberOfDoors)numberOfDoorsInObjectForm;
@@ -194,65 +206,86 @@ namespace Ex03.GarageLogic
             return numberOfDoors;
         }
 
-        private static Veichle createNewTruck(Dictionary<string, object> i_VeichleCharaterstic, bool i_UsesFuel)
+        private static Vehicle createNewTruck(Dictionary<string, object> i_VehicleCharaterstic, bool i_UsesFuel)
         {
             Energy energyType;
             if (i_UsesFuel)
             {
-                energyType = createEnergySource(i_VeichleCharaterstic, k_MaxTankSizeInTruck, k_TruckFuelType);
+                energyType = createEnergySource(i_VehicleCharaterstic, k_MaxTankSizeInTruck, k_TruckFuelType);
             }
             else
             {
-                energyType = createEnergySource(i_VeichleCharaterstic, k_MaxBatterySizeInTruck);
+                energyType = createEnergySource(i_VehicleCharaterstic, k_MaxBatterySizeInTruck);
             }
 
-            List<Wheel> wheels = createWheelsList(i_VeichleCharaterstic, k_NumberOfWheelsInTruck, k_MaxAirPressureInTruckWheel);
+            List<Wheel> wheels = createWheelsList(i_VehicleCharaterstic, k_NumberOfWheelsInTruck, k_MaxAirPressureInTruckWheel);
 
             bool hasDangerousCargo;
             float maxCargoWeight, percentOfEnergyLeft;
             string modelName, licenceNumber;
-            getInputParamtersForTruck(i_VeichleCharaterstic, out hasDangerousCargo, out maxCargoWeight, out modelName, out licenceNumber, out percentOfEnergyLeft);
+            getInputParamtersForTruck(i_VehicleCharaterstic, out hasDangerousCargo, out maxCargoWeight, out modelName, out licenceNumber, out percentOfEnergyLeft);
 
             return new Truck(hasDangerousCargo, maxCargoWeight, modelName, licenceNumber, percentOfEnergyLeft, energyType, wheels);
         }
 
-        private static List<Wheel> createWheelsList(Dictionary<string, object> i_VeichleCharaterstic, int i_numberOfWheels, float i_MaxAirPressureInWheel)
+        private static List<Wheel> createWheelsList(Dictionary<string, object> i_VehicleCharaterstic, int i_numberOfWheels, float i_MaxAirPressureInWheel)
         {
-            List<float> currentAirPressureInWheels = getFloatListFromDict(i_VeichleCharaterstic, k_CurrentPressureInWheelsKey);
-            string wheelMakerName = getStringFromDict(i_VeichleCharaterstic, k_WheelMakerKey);
+            List<float> currentAirPressureInWheels = getFloatListFromDict(i_VehicleCharaterstic, k_CurrentPressureInWheelsKey);
+            List<string> wheelMakerName = getStringListFromDict(i_VehicleCharaterstic, k_WheelMakerKey);
             List<Wheel> wheels = createWheels(wheelMakerName, i_numberOfWheels, i_MaxAirPressureInWheel, currentAirPressureInWheels);
             return wheels;
         }
 
-        private static Energy createEnergySource(Dictionary<string, object> i_VeichleCharaterstic, float i_MaxBatterySize)
+        private static List<string> getStringListFromDict(Dictionary<string, object> i_VehicleCharaterstic, string i_Key)
         {
-            float currentEnergyLevel = getFloatFromDict(i_VeichleCharaterstic, k_CurrentEnergyLevelKey);
+            bool didGetWork;
+            object valueOfListInObjectForm;
+            didGetWork = i_VehicleCharaterstic.TryGetValue(i_Key, out valueOfListInObjectForm);
+            if (!didGetWork)
+            {
+                throw new FormatException(string.Format("Wrong Dictionary Format, no {0} field", i_Key));
+            }
+
+            List<string> listInListForm = (List<string>)valueOfListInObjectForm;
+
+            return listInListForm;
+        }
+
+        private static Energy createEnergySource(Dictionary<string, object> i_VehicleCharaterstic, float i_MaxBatterySize)
+        {
+            float currentEnergyLevel = getFloatFromDict(i_VehicleCharaterstic, k_CurrentEnergyLevelKey);
             Energy energyType = createEnergyByType(currentEnergyLevel, i_MaxBatterySize);
             return energyType;
         }
 
-        private static Energy createEnergySource(Dictionary<string, object> i_VeichleCharaterstic, float i_MaxTankSize, Fuel.eFuelType i_FuelType)
+        private static Energy createEnergySource(Dictionary<string, object> i_VehicleCharaterstic, float i_MaxTankSize, Fuel.eFuelType i_FuelType)
         {
-            float currentEnergyLevel = getFloatFromDict(i_VeichleCharaterstic, k_CurrentEnergyLevelKey);
+            float currentEnergyLevel = getFloatFromDict(i_VehicleCharaterstic, k_CurrentEnergyLevelKey);
             Energy energyType = createEnergyByType(currentEnergyLevel, i_MaxTankSize, i_FuelType);
             return energyType;
         }
 
-        private static void getInputParamtersForTruck(Dictionary<string, object> i_VeichleCharaterstic, out bool o_HasDangerousCargo, out float o_MaxCargoWeight, out string o_ModelName, out string o_LicenceNumber, out float o_PercentOfEnergyLeft)
+        private static void getInputParamtersForTruck(
+            Dictionary<string, object> i_VehicleCharaterstic, 
+            out bool o_HasDangerousCargo, 
+            out float o_MaxCargoWeight, 
+            out string o_ModelName, 
+            out string o_LicenceNumber,
+            out float o_PercentOfEnergyLeft)
         {
-            o_HasDangerousCargo = getBoolValueFromDict(i_VeichleCharaterstic, k_HasDangerousCargoKey);
-            o_MaxCargoWeight = getFloatFromDict(i_VeichleCharaterstic, k_MaxCargoWeightForTruckKey);
-            getVeichleParameters(i_VeichleCharaterstic, out o_ModelName, out o_LicenceNumber, out o_PercentOfEnergyLeft);
+            o_HasDangerousCargo = getBoolValueFromDict(i_VehicleCharaterstic, k_HasDangerousCargoKey);
+            o_MaxCargoWeight = getFloatFromDict(i_VehicleCharaterstic, k_MaxCargoWeightForTruckKey);
+            getVehicleParameters(i_VehicleCharaterstic, out o_ModelName, out o_LicenceNumber, out o_PercentOfEnergyLeft);
         }
 
-        private static string getStringFromDict(Dictionary<string, object> i_VeichleCharaterstic, string i_Key)
+        private static string getStringFromDict(Dictionary<string, object> i_VehicleCharaterstic, string i_Key)
         {
             bool didGetWork;
             object valueOfStringInObjectForm;
-            didGetWork = i_VeichleCharaterstic.TryGetValue(i_Key, out valueOfStringInObjectForm);
+            didGetWork = i_VehicleCharaterstic.TryGetValue(i_Key, out valueOfStringInObjectForm);
             if (!didGetWork)
             {
-                throw new FormatException();
+                throw new FormatException(string.Format("Wrong Dictionary Format, no {0} field", i_Key));
             }
 
             string stringInStringForm = valueOfStringInObjectForm.ToString();
@@ -260,14 +293,14 @@ namespace Ex03.GarageLogic
             return stringInStringForm;
         }
 
-        private static List<float> getFloatListFromDict(Dictionary<string, object> i_VeichleCharaterstic, string i_Key)
+        private static List<float> getFloatListFromDict(Dictionary<string, object> i_VehicleCharaterstic, string i_Key)
         {
             bool didGetWork;
             object valueOfListInObjectForm;
-            didGetWork = i_VeichleCharaterstic.TryGetValue(i_Key, out valueOfListInObjectForm);
+            didGetWork = i_VehicleCharaterstic.TryGetValue(i_Key, out valueOfListInObjectForm);
             if (!didGetWork)
             {
-                throw new FormatException();
+                throw new FormatException(string.Format("Wrong Dictionary Format, no {0} field", i_Key));
             }
 
             List<float> listInListForm = (List<float>) valueOfListInObjectForm;
@@ -275,14 +308,14 @@ namespace Ex03.GarageLogic
             return listInListForm;
         }
 
-        private static float getFloatFromDict(Dictionary<string, object> i_VeichleCharaterstic, string i_Key)
+        private static float getFloatFromDict(Dictionary<string, object> i_VehicleCharaterstic, string i_Key)
         {
             bool didGetWork;
             object valueOfNumberInObjectFormat;
-            didGetWork = i_VeichleCharaterstic.TryGetValue(i_Key, out valueOfNumberInObjectFormat);
+            didGetWork = i_VehicleCharaterstic.TryGetValue(i_Key, out valueOfNumberInObjectFormat);
             if (!didGetWork)
             {
-                throw new FormatException();
+                throw new FormatException(string.Format("Wrong Dictionary Format, no {0} field", i_Key));
             }
 
             float numberInFloatFormat = (float) valueOfNumberInObjectFormat;
@@ -290,14 +323,14 @@ namespace Ex03.GarageLogic
             return numberInFloatFormat;
         }
 
-        private static bool getBoolValueFromDict(Dictionary<string, object> i_VeichleCharaterstic, string i_Key)
+        private static bool getBoolValueFromDict(Dictionary<string, object> i_VehicleCharaterstic, string i_Key)
         {
             bool didGetWork;
             object valueOfBoolInObjectForm;
-            didGetWork = i_VeichleCharaterstic.TryGetValue(i_Key, out valueOfBoolInObjectForm);
+            didGetWork = i_VehicleCharaterstic.TryGetValue(i_Key, out valueOfBoolInObjectForm);
             if (!didGetWork)
             {
-                throw new FormatException();
+                throw new FormatException(string.Format("Wrong Dictionary Format, no {0} field", i_Key));
             }
 
             bool booleanInBoolForm = (bool)valueOfBoolInObjectForm;
@@ -305,13 +338,13 @@ namespace Ex03.GarageLogic
             return booleanInBoolForm;
         }
 
-        private static List<Wheel> createWheels(string i_WheelMakerName, int i_NumberOfWheelsInTruck, float i_MaxAirPressureInTruckWheel, List<float> i_CurrentAirPressureInWheels)
+        private static List<Wheel> createWheels(List<string> i_WheelMakerName, int i_NumberOfWheelsInTruck, float i_MaxAirPressureInTruckWheel, List<float> i_CurrentAirPressureInWheels)
         {
             List<Wheel> wheels = new List<Wheel>();
 
             for (int wheelNumber = 0; wheelNumber < i_NumberOfWheelsInTruck; wheelNumber++)
             {
-                Wheel newWheel = new Wheel(i_WheelMakerName, i_CurrentAirPressureInWheels[wheelNumber], i_MaxAirPressureInTruckWheel);
+                Wheel newWheel = new Wheel(i_WheelMakerName[wheelNumber], i_CurrentAirPressureInWheels[wheelNumber], i_MaxAirPressureInTruckWheel);
                 wheels.Add(newWheel);
             }
 
@@ -334,7 +367,7 @@ namespace Ex03.GarageLogic
             return energyType;
         }
 
-        internal enum ePossibleVeichleTypes
+        internal enum ePossibleVehicleTypes
         {
             FuelBike,
             ElectricBike,

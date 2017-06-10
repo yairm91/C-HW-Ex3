@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Ex03.GarageLogic
 {
@@ -19,13 +17,14 @@ namespace Ex03.GarageLogic
             get { return m_MaxValue; }
         }
 
-        public ValueOutOfRangeException(int i_MinimumValue, int i_MaximumValue)
+        public ValueOutOfRangeException(float i_MinimumValue, float i_MaximumValue)
             : base(string.Format(
                 "the input is not in the range between {0} to {1}",
                 i_MinimumValue,
                 i_MaximumValue))
         {
+            m_MaxValue = i_MaximumValue;
+            m_MinValue = i_MinimumValue;
         }
     }
-
 }

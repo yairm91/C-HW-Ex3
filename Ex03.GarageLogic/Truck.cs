@@ -2,7 +2,7 @@
 
 namespace Ex03.GarageLogic
 {
-    internal class Truck : Veichle
+    internal class Truck : Vehicle
     {
         private bool m_HasDangerousCargo;
         private float m_MaxCargoWeight;

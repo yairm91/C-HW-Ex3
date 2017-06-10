@@ -1,13 +1,22 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace Ex03.GarageLogic
 {
     internal class Electric : Energy
     {
-        private const string k_EnergyType = "Electric";
+        internal const string k_EnergyType = "Electric";
         private float m_TimeLeftOnBatteryInHours;
         private float m_MaxTimeInBatteryInHours;
+
+        public float TimeLeftOnBatteryInHours
+        {
+            get { return m_TimeLeftOnBatteryInHours; }
+        }
+
+        public float MaxTimeInBatteryInHours
+        {
+            get { return m_MaxTimeInBatteryInHours; }
+        }
 
         public Electric(float i_TimeLeftOnBatteryInHours, float i_MaxTimeInBatteryInHours)
         {
@@ -22,7 +31,7 @@ namespace Ex03.GarageLogic
 
             if (tempNewValueOfBattery > m_MaxTimeInBatteryInHours)
             {
-                throw new ArgumentException();
+                throw new ValueOutOfRangeException(0, m_MaxTimeInBatteryInHours - m_TimeLeftOnBatteryInHours);
             }
             else
             {

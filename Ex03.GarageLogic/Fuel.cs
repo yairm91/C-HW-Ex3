@@ -5,8 +5,8 @@ namespace Ex03.GarageLogic
 {
     internal class Fuel : Energy
     {
-        private const string k_EnergyType = "Fuel";
-        private const string k_FuelType = "FuelType";
+        internal const string k_EnergyType = "Fuel";
+        internal const string k_FuelType = "FuelType";
         private eFuelType m_FuelType;
         private float m_AmountOfFuelInTankInLiters;
         private float m_MaxCapacityOfFuelTankInLiters;
@@ -17,6 +17,21 @@ namespace Ex03.GarageLogic
             Octan95,
             Octan96,
             Octan98
+        }
+
+        public float AmountOfFuelInTankInLiters
+        {
+            get { return m_AmountOfFuelInTankInLiters; }
+        }
+
+        public float MaxCapacityOfFuelTankInLiters
+        {
+            get { return m_MaxCapacityOfFuelTankInLiters; }
+        }
+
+        public eFuelType FuelType
+        {
+            get { return m_FuelType; }
         }
 
         public Fuel(float i_AmountOfFuelInTankInLiters, float i_MaxCapacityOfFuelTankInLiters, eFuelType i_FuelType)
@@ -34,19 +49,19 @@ namespace Ex03.GarageLogic
             bool didGetWork = i_ValuesToAddEnergy.TryGetValue(k_FuelType, out fuelTypeInObjectForm);
             if (!didGetWork)
             {
-                throw new FormatException();
+                throw new FormatException("Error while parsing the value");
             }
 
-            if(fuelTypeInObjectForm.ToString() != m_FuelType.ToString())
+            if(fuelTypeInObjectForm.ToString() != Enum.GetName(typeof(eFuelType), m_FuelType))
             {
-                throw new ArgumentException();
+                throw new ArgumentException("Wrong Energy Type, please provide fuel");
             }
 
             float tempAmountOfFuelInTank = m_AmountOfFuelInTankInLiters + valueToAddToFuelTank;
 
             if (tempAmountOfFuelInTank > m_MaxCapacityOfFuelTankInLiters)
             {
-                throw new ArgumentException();
+                throw new ValueOutOfRangeException(0, m_MaxCapacityOfFuelTankInLiters - m_AmountOfFuelInTankInLiters);
             }
             else
             {

@@ -1,15 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 
 namespace Ex03.GarageLogic
 {
-    internal class Bike : Veichle
+    internal class Bike : Vehicle
     {    
         private eTypeOfLicence m_TypeOfLicence;
         private int m_EngineVolume;
 
-        public int TankVolume
+        public int EngineVolume
         {
             get { return m_EngineVolume; }
         }

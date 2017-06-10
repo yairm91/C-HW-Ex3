@@ -75,7 +75,7 @@ namespace Ex03.ConsoleUI
                 float numberOfHoursToCharge = GarageInterface.GetNumberOfMinuetsToChargeBattery() / k_NumberOfMinutesInOneHour;
                 try
                 {
-                    io_ThisGarage.ChargeElectricityBasedVeichle(vehicleLicenseNumber, numberOfHoursToCharge);
+                    io_ThisGarage.ChargeElectricityBasedVehicle(vehicleLicenseNumber, numberOfHoursToCharge);
                     GarageInterface.SendSucsses();
                 }
                 catch (ArgumentException argumentException)
@@ -136,7 +136,7 @@ namespace Ex03.ConsoleUI
                 string newInGargeStateOfVehicle = GarageInterface.GetVehicleNewStateInGarageFromUser();
                 try
                 {
-                    io_ThisGarage.ChangeInGargeStateOfVeichle(vehicleLicenseNumber, newInGargeStateOfVehicle);
+                    io_ThisGarage.ChangeInGargeStateOfVehicle(vehicleLicenseNumber, newInGargeStateOfVehicle);
                     GarageInterface.SendSucsses();
                 }
                 catch (FormatException formatException)
@@ -153,7 +153,7 @@ namespace Ex03.ConsoleUI
             try
             {
                 GarageInterface.ShowThisStringAsOutput
-                                   (i_ThisGarage.ShowLicenseNumbersOfVeichlesInGarageWithFilterByState(InGargeStateOfVehicleToFilterWith));
+                                   (i_ThisGarage.ShowLicenseNumbersOfVehiclesInGarageWithFilterByState(InGargeStateOfVehicleToFilterWith));
             }
             catch (FormatException formatException)
             {

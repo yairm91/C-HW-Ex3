@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Ex03.GarageLogic
+﻿namespace Ex03.GarageLogic
 {
     internal class Wheel
     {
@@ -11,6 +9,11 @@ namespace Ex03.GarageLogic
         internal float CurrentAirPressureInWheel
         {
             get { return m_CurrentAirPressureInWheel; }
+        }
+
+        internal string MakerName
+        {
+            get { return m_MakerName; }
         }
 
         internal float MaxAirPressureInWheelAccordingToMaker
@@ -30,7 +33,7 @@ namespace Ex03.GarageLogic
             float tempCurrentAirPressureInWheel = m_CurrentAirPressureInWheel + i_AmountOfPressureToAdd;
             if (tempCurrentAirPressureInWheel > m_MaxAirPressureInWheelAccordingToMaker)
             {
-                throw new ArgumentException();
+                throw new ValueOutOfRangeException(0, m_MaxAirPressureInWheelAccordingToMaker - m_CurrentAirPressureInWheel);
             }
             else
             {

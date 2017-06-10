@@ -5,10 +5,8 @@ namespace Ex03.GarageLogic
 {
     internal abstract class Energy
     {
-        //TODO: update percent of energy left in add energy
-        private const string k_ValueType = "EnergyType";
-        private const string k_ValueToAdd = "Value";
-        private const float k_MultiplyByHundredToTurnIntoPrecantage = 100;
+        internal const string k_ValueType = "EnergyType";
+        internal const string k_ValueToAdd = "Value";
 
         internal abstract void AddEnergy(Dictionary<string, object> i_ValuesToAddEnergy);
 
@@ -18,31 +16,24 @@ namespace Ex03.GarageLogic
             bool didGetWork = i_ValuesToAddEnergy.TryGetValue(k_ValueType, out valueType);
             if (!didGetWork)
             {
-                throw new FormatException();
+                throw new FormatException("Error while parsing the value");
             }
 
             if (valueType.ToString() != i_EnergyType)
             {
-                throw new ArgumentException();
+                throw new ArgumentException(string.Format("Wrong energy type, please provide {0}", i_EnergyType));
             }
 
             object valueToAddObjectForm;
             didGetWork = i_ValuesToAddEnergy.TryGetValue(k_ValueToAdd, out valueToAddObjectForm);
             if (!didGetWork)
             {
-                throw new FormatException();
+                throw new FormatException("Error while parsing the value");
             }
 
             float valueToAddFloatForm = (float)valueToAddObjectForm;
 
             return valueToAddFloatForm;
-        }
-
-        protected static float calculateNewPrecanteOfEnergy(float i_MaxAmountOfEnergy, float i_CurrentAmountOfEnergy)
-        {
-            float newPrecantgeOfEnergy = (i_CurrentAmountOfEnergy / i_MaxAmountOfEnergy) * k_MultiplyByHundredToTurnIntoPrecantage;
-
-            return newPrecantgeOfEnergy;
         }
     }
 }
