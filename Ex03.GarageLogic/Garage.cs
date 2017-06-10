@@ -185,7 +185,15 @@ namespace Ex03.GarageLogic
         public void FuelNumberOfLitersToFuelBasedVehicle(string i_VehicleLicenseNumber, string i_TypeOfFuel, float i_LitersOfFuelToFill)
         {
             GarageVehicle ownerVehicle = GetGarageVehicleByLicenseNumber(i_VehicleLicenseNumber);
-            Fuel.eFuelType fuelType = (Fuel.eFuelType) Enum.Parse(typeof(Fuel.eFuelType), i_TypeOfFuel);
+
+            try
+            {
+                Fuel.eFuelType fuelType = (Fuel.eFuelType)Enum.Parse(typeof(Fuel.eFuelType), i_TypeOfFuel);
+            }
+            catch (OverflowException ex)
+            {
+                throw new FormatException("Wrong fuel type", ex.InnerException);
+            }
 
             Dictionary<string, object> parametersForEnergyCharging = new Dictionary<string, object>();
             parametersForEnergyCharging.Add(Energy.k_ValueType, Fuel.k_EnergyType);
@@ -201,9 +209,15 @@ namespace Ex03.GarageLogic
         public void ChangeInGargeStateOfVehicle(string i_VehicleLicenseNumber, string i_NewInGargeStateOfVehicle)
         {
             GarageVehicle ownerVehicle = GetGarageVehicleByLicenseNumber(i_VehicleLicenseNumber);
-            GarageVehicle.eVehicleState newVehicleState = (GarageVehicle.eVehicleState)Enum.Parse(typeof(GarageVehicle.eVehicleState), i_NewInGargeStateOfVehicle);
-
-            ownerVehicle.VehicleState = newVehicleState;
+            try
+            {
+                GarageVehicle.eVehicleState newVehicleState = (GarageVehicle.eVehicleState)Enum.Parse(typeof(GarageVehicle.eVehicleState), i_NewInGargeStateOfVehicle);
+                ownerVehicle.VehicleState = newVehicleState;
+            }
+            catch (OverflowException ex)
+            {
+                throw new FormatException("Wrong vehicle state", ex.InnerException);
+            }            
         }
 
         public string ShowLicenseNumbersOfVehiclesInGarageWithFilterByState(string i_InGargeStateOfVehicleToFilterWith)
@@ -224,15 +238,22 @@ namespace Ex03.GarageLogic
 
         private void showVehiclesAccordingToState(string i_InGargeStateOfVehicleToFilterWith, StringBuilder i_ListOfVehiclesInGarage)
         {
-            GarageVehicle.eVehicleState filterVehicleState = (GarageVehicle.eVehicleState)Enum.Parse(typeof(GarageVehicle.eVehicleState), i_InGargeStateOfVehicleToFilterWith);
-            foreach (string key in m_VehiclesInGarage.Keys)
+            try
             {
-                GarageVehicle currentVehicle = m_VehiclesInGarage[key];
-                if (currentVehicle.VehicleState == filterVehicleState)
+                GarageVehicle.eVehicleState filterVehicleState = (GarageVehicle.eVehicleState)Enum.Parse(typeof(GarageVehicle.eVehicleState), i_InGargeStateOfVehicleToFilterWith);
+                foreach (string key in m_VehiclesInGarage.Keys)
                 {
-                    i_ListOfVehiclesInGarage.AppendLine(currentVehicle.OwnerVehicle.LicenceNumber);
+                    GarageVehicle currentVehicle = m_VehiclesInGarage[key];
+                    if (currentVehicle.VehicleState == filterVehicleState)
+                    {
+                        i_ListOfVehiclesInGarage.AppendLine(currentVehicle.OwnerVehicle.LicenceNumber);
+                    }
                 }
             }
+            catch (OverflowException ex)
+            {
+                throw new FormatException("Wrong vehicle state", ex.InnerException);
+            }  
         }
 
         private void showAllVehiclesInGarage(StringBuilder i_ListOfVehiclesInGarage)
