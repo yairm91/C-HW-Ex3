@@ -6,12 +6,12 @@ namespace Ex03.ConsoleUI
 {
     class Program
     {
-        private const int k_numberOfMinutesInOneHour = 60;
-
         public static void Main()
         {
             runGarageProgram();
         }
+
+        private const int k_NumberOfMinutesInOneHour = 60;
 
         private static void runGarageProgram()
         {
@@ -29,7 +29,7 @@ namespace Ex03.ConsoleUI
                         showLicenseNumbersOfVeichlesInGarageOption(thisGarage);
                         break;
                     case eFunctionalityOptionsOfGarageProgram.ChangeStateOfVeichle:
-                        changeStateOfVeichleOption(thisGarage);
+                        changeInGargeStateOfVeichleOption(thisGarage);
                         break;
                     case eFunctionalityOptionsOfGarageProgram.InflateAirInWheelsOfVeichleToMaximum:
                         inflateAirInWheelsOfVeichleToMaximumOption(thisGarage);
@@ -38,7 +38,7 @@ namespace Ex03.ConsoleUI
                         fuelVeichleBasedOnFuelOption(thisGarage);
                         break;
                     case eFunctionalityOptionsOfGarageProgram.ChargeVeichleBasedOnElectricity:
-                        chargeVeichleBasedOnElectricityOption(thisGarage);
+                        chargeVehicleBasedOnElectricityOption(thisGarage);
                         break;
                     case eFunctionalityOptionsOfGarageProgram.ShowFullDataOfVeichleByLicenseNumber:
                         showFullDataOfVeichleByLicenseNumberOption(thisGarage);
@@ -52,55 +52,113 @@ namespace Ex03.ConsoleUI
             GarageInterface.QuitProgramWithMessage();
         }
 
-        //TODO -do the Functionality of step 7 
-        private static void showFullDataOfVeichleByLicenseNumberOption(Garage io_ThisGarage)
-        {
 
-            Console.WriteLine("7");
+        private static void showFullDataOfVeichleByLicenseNumberOption(Garage i_ThisGarage)
+        {
+            string vehicleLicenseNumber = GarageInterface.GetVeichleLicenseNumberFromUser();
+            bool isVehicleInThisGarage = isInGarageIfNotSendError(i_ThisGarage, vehicleLicenseNumber);
+
+            if (isVehicleInThisGarage)
+            {
+                GarageInterface.ShowThisStringAsOutput
+                    (i_ThisGarage.getFullVehicleDetailsByLicenseNumber(vehicleLicenseNumber));
+            }
         }
 
-        //TODO -do the Functionality of step 6 
-        private static void chargeVeichleBasedOnElectricityOption(Garage io_ThisGarage)
+        private static void chargeVehicleBasedOnElectricityOption(Garage io_ThisGarage)
         {
-            string veichleLicenseNumber = GarageInterface.GetVeichleLicenseNumberFromUser();
-            float numberOfHoursToCharge = GarageInterface.GetNumberOfMinuetsToChargeBattery() 
-                / k_numberOfMinutesInOneHour;
-           
+            string vehicleLicenseNumber = GarageInterface.GetVeichleLicenseNumberFromUser();
+            bool isVehicleInThisGarage = isInGarageIfNotSendError(io_ThisGarage, vehicleLicenseNumber);
 
-
+            if (isVehicleInThisGarage)
+            {
+                float numberOfHoursToCharge = GarageInterface.GetNumberOfMinuetsToChargeBattery() / k_NumberOfMinutesInOneHour;
+                try
+                {
+                    io_ThisGarage.ChargeElectricityBasedVeichle(vehicleLicenseNumber, numberOfHoursToCharge);
+                    GarageInterface.SendSucsses();
+                }
+                catch (ArgumentException argumentException)
+                {
+                    GarageInterface.ShowThisStringAsOutput(argumentException.Message);
+                }
+            }
         }
 
-        //TODO -do the Functionality of step 5 
         private static void fuelVeichleBasedOnFuelOption(Garage io_ThisGarage)
         {
-            Console.WriteLine("5");
+            string vehicleLicenseNumber = GarageInterface.GetVeichleLicenseNumberFromUser();
+            bool isVehicleInThisGarage = isInGarageIfNotSendError(io_ThisGarage, vehicleLicenseNumber);
+
+            if (isVehicleInThisGarage)
+            {
+                string typeOfFuel = GarageInterface.GetTypeOfFuelFromUser();
+                float litersOfFuelToFill = GarageInterface.GetNumberOfLitersOfFuel();
+                try
+                {
+                    io_ThisGarage.FuelNumberOfLitersToFuelBasedVehicle
+                        (vehicleLicenseNumber, typeOfFuel, litersOfFuelToFill);
+                }
+                catch(FormatException formatException)
+                {
+                    GarageInterface.ShowThisStringAsOutput(formatException.Message);
+                }
+                catch (ArgumentException argumentException)
+                {
+                    GarageInterface.ShowThisStringAsOutput(argumentException.Message);
+                }
+                catch (ValueOutOfRangeException outOfRangeException)
+                {
+                    GarageInterface.ShowThisStringAsOutput(outOfRangeException.Message);
+                }
+            }
         }
 
         private static void inflateAirInWheelsOfVeichleToMaximumOption(Garage io_ThisGarage)
         {
-            string veichleLicenseNumber = GarageInterface.GetVeichleLicenseNumberFromUser();
+            string vehicleLicenseNumber = GarageInterface.GetVeichleLicenseNumberFromUser();
+            bool isVehicleInThisGarage = isInGarageIfNotSendError(io_ThisGarage, vehicleLicenseNumber);
 
+            if (isVehicleInThisGarage)
+            {
+                io_ThisGarage.InflateAirInWheelsOfChoosenVehicleToMaximum(vehicleLicenseNumber);
+                GarageInterface.SendSucsses();
+            }
+        }
+
+        private static void changeInGargeStateOfVeichleOption(Garage io_ThisGarage)
+        {
+            string vehicleLicenseNumber = GarageInterface.GetVeichleLicenseNumberFromUser();
+            bool isVehicleInThisGarage = isInGarageIfNotSendError(io_ThisGarage, vehicleLicenseNumber);
+
+            if (isVehicleInThisGarage)
+            {
+                string newInGargeStateOfVehicle = GarageInterface.GetVehicleNewStateInGarageFromUser();
+                try
+                {
+                    io_ThisGarage.ChangeInGargeStateOfVeichle(vehicleLicenseNumber, newInGargeStateOfVehicle);
+                    GarageInterface.SendSucsses();
+                }
+                catch (FormatException formatException)
+                {
+                    GarageInterface.ShowThisStringAsOutput(formatException.Message);
+                }
+            }
+        }
+
+        private static void showLicenseNumbersOfVeichlesInGarageOption(Garage i_ThisGarage)
+        {
+            string InGargeStateOfVehicleToFilterWith = GarageInterface.GetAndSetVeichleStateIfUserWantTo();
+            
             try
             {
-                Garage.InflateAirInWheelsOfChoosenVehicleToMaximum(veichleLicenseNumber);
-                GarageInterface.printSucsses();
+                GarageInterface.ShowThisStringAsOutput
+                                   (i_ThisGarage.ShowLicenseNumbersOfVeichlesInGarageWithFilterByState(InGargeStateOfVehicleToFilterWith));
             }
-            catch (NullReferenceException)
+            catch (FormatException formatException)
             {
-                GarageInterface.ErrorCantFindVeichleByLicenseNumber(veichleLicenseNumber);
+                GarageInterface.ShowThisStringAsOutput(formatException.Message);
             }
-        }
-
-        //TODO -do the Functionality of step 3 
-        private static void changeStateOfVeichleOption(Garage io_ThisGarage)
-        {
-            Console.WriteLine("3");
-        }
-
-        //TODO -do the Functionality of step 2 
-        private static void showLicenseNumbersOfVeichlesInGarageOption(Garage io_ThisGarage)
-        {
-            Console.WriteLine("2");
         }
 
         //TODO -do the Functionality of step 1 
@@ -109,6 +167,17 @@ namespace Ex03.ConsoleUI
             Console.WriteLine("TODO");
         }
 
+        private static bool isInGarageIfNotSendError(Garage i_ThisGarage, string i_VehicleLicenseNumber)
+        {
+            bool isInGarage = i_ThisGarage.IsVehicleInThisGarage(i_VehicleLicenseNumber);
+
+            if (!isInGarage)
+            {
+                GarageInterface.ErrorCantFindVeichleByLicenseNumber(i_VehicleLicenseNumber);
+            }
+
+            return isInGarage;
+        }
         internal enum eFunctionalityOptionsOfGarageProgram
         {
             QuitProgram,

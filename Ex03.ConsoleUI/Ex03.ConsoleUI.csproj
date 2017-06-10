@@ -43,7 +43,6 @@
   <ItemGroup>
     <Compile Include="GarageInterface.cs" />
     <Compile Include="Program.cs" />
-    <Compile Include="ValueOutOfRangeException.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />

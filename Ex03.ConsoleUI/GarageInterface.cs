@@ -88,19 +88,30 @@ To Quit enter: {7}",
             0));
         }
 
+        
+        internal static void ShowThisStringAsOutput(string i_TheStringToOutput)
+        {
+            Console.WriteLine(i_TheStringToOutput);
+        }
+
         internal static float GetNumberOfMinuetsToChargeBattery()
         {
-            float numberOfMinuets;
-
             Console.WriteLine("Please enter number of minuets to charge the battery:");
-            bool parseSucceed = float.TryParse(Console.ReadLine(), out numberOfMinuets);
+            return loopUntilGettingValidFloat(
+                "Wrong input! number of minuets to charge the battery should be a float, please insert valid input:");
+        }
+
+        private static float loopUntilGettingValidFloat(string i_StringToPrintInEachFail)
+        {
+            float numberToGetFromUser;
+            bool parseSucceed = float.TryParse(Console.ReadLine(), out numberToGetFromUser);
             while (!parseSucceed)
             {
-                Console.WriteLine("Wrong input! number of minuets to charge the battery should be a float, please insert valid input:");
-                parseSucceed = float.TryParse(Console.ReadLine(), out numberOfMinuets);
+                Console.WriteLine(i_StringToPrintInEachFail);
+                parseSucceed = float.TryParse(Console.ReadLine(), out numberToGetFromUser);
             }
 
-            return numberOfMinuets;
+            return numberToGetFromUser;
         }
 
         internal static string GetVeichleLicenseNumberFromUser()
@@ -114,7 +125,20 @@ To Quit enter: {7}",
             Console.WriteLine("The Veichle with the License Number: {0} does not exist in this garage data base", i_VeichleLicenseNumber);
         }
 
-        internal static void printSucsses()
+        internal static string GetTypeOfFuelFromUser()
+        {
+            Console.WriteLine("Please enter the type of fuel you want to fill:");
+            return Console.ReadLine();
+        }
+
+        internal static float GetNumberOfLitersOfFuel()
+        {
+            Console.WriteLine("Please enter liters of fuel to fill the tank of the vehicle:");
+            return loopUntilGettingValidFloat(
+                "Wrong input! liters of fuel should be a float, please insert valid input:");
+        }
+
+        internal static void SendSucsses()
         {
             Console.WriteLine(@"Operation completed sucssesfuly!
 ");
@@ -123,6 +147,43 @@ To Quit enter: {7}",
         internal static void QuitProgramWithMessage()
         {
             Console.WriteLine("You choose to exit - goodbye");
+        }
+
+        internal static string GetVehicleNewStateInGarageFromUser()
+        {
+            Console.WriteLine("Please enter the new garage state of the vehicle:");
+            return Console.ReadLine();
+        }
+
+        // if user dont want to enter state return null 
+        internal static string GetAndSetVeichleStateIfUserWantTo()
+        {
+            string stateToReturn = null;
+
+            Console.WriteLine("Please enter 1 if you want to filter by garage state else press enter:");
+            string userInput = Console.ReadLine();
+            if (checkIfUserAnswerYesOnBooleanQuestion(userInput))
+            {
+                Console.WriteLine("Please enter the  garage state to filter by:");
+                stateToReturn = Console.ReadLine();
+            }
+
+            return stateToReturn;
+        }
+
+        // if answered yes - its mean that user answered yes 
+        private static bool checkIfUserAnswerYesOnBooleanQuestion(string i_UserInput)
+        {
+            int checkIfEqualOne;
+            bool isAnsweredYes = false;
+            bool parseSucceed = int.TryParse(i_UserInput, out checkIfEqualOne);
+
+            if (parseSucceed && checkIfEqualOne == 1)
+            {
+                isAnsweredYes = true;
+            }
+
+            return isAnsweredYes;
         }
     }
 }
