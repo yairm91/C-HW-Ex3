@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
+
 
 namespace Ex03.GarageLogic
 {
@@ -262,6 +262,13 @@ namespace Ex03.GarageLogic
             {
                 i_ListOfVehiclesInGarage.AppendLine(m_VehiclesInGarage[key].OwnerVehicle.LicenceNumber);
             }
+        }
+
+
+        //TODO
+        public void InsertNewVehicle(Dictionary<string, object> newVehicleData)
+        {
+            throw new NotImplementedException();
         }
     }
 }
