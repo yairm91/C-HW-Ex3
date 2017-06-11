@@ -8,8 +8,6 @@ namespace Ex03.GarageLogic
         internal const string k_EnergyType = "Fuel";
         internal const string k_FuelType = "FuelType";
         private eFuelType m_FuelType;
-        private float m_AmountOfFuelInTankInLiters;
-        private float m_MaxCapacityOfFuelTankInLiters;
 
         internal enum eFuelType
         {
@@ -19,25 +17,13 @@ namespace Ex03.GarageLogic
             Octan98
         }
 
-        public float AmountOfFuelInTankInLiters
-        {
-            get { return m_AmountOfFuelInTankInLiters; }
-        }
-
-        public float MaxCapacityOfFuelTankInLiters
-        {
-            get { return m_MaxCapacityOfFuelTankInLiters; }
-        }
-
         public eFuelType FuelType
         {
             get { return m_FuelType; }
         }
 
-        public Fuel(float i_AmountOfFuelInTankInLiters, float i_MaxCapacityOfFuelTankInLiters, eFuelType i_FuelType)
+        public Fuel(float i_AmountOfFuelInTankInLiters, float i_MaxCapacityOfFuelTankInLiters, eFuelType i_FuelType) : base(i_MaxCapacityOfFuelTankInLiters, i_AmountOfFuelInTankInLiters)
         {
-            m_AmountOfFuelInTankInLiters = i_AmountOfFuelInTankInLiters;
-            m_MaxCapacityOfFuelTankInLiters = i_MaxCapacityOfFuelTankInLiters;
             m_FuelType = i_FuelType;
         }
 
@@ -57,15 +43,15 @@ namespace Ex03.GarageLogic
                 throw new ArgumentException("Wrong Energy Type, please provide fuel");
             }
 
-            float tempAmountOfFuelInTank = m_AmountOfFuelInTankInLiters + valueToAddToFuelTank;
+            float tempAmountOfFuelInTank = m_CurrentAmountOfEnergy + valueToAddToFuelTank;
 
-            if (tempAmountOfFuelInTank > m_MaxCapacityOfFuelTankInLiters)
+            if (tempAmountOfFuelInTank > m_MaxAmountOfEnergy)
             {
-                throw new ValueOutOfRangeException(0, m_MaxCapacityOfFuelTankInLiters - m_AmountOfFuelInTankInLiters);
+                throw new ValueOutOfRangeException(0, m_MaxAmountOfEnergy - m_CurrentAmountOfEnergy);
             }
             else
             {
-                m_AmountOfFuelInTankInLiters = tempAmountOfFuelInTank;
+                m_CurrentAmountOfEnergy = tempAmountOfFuelInTank;
             }
         }
     }

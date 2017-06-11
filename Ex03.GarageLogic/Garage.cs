@@ -26,7 +26,7 @@ namespace Ex03.GarageLogic
         private static void getElectricInformation(GarageVehicle i_VehicleInGarageToWorkOn, StringBuilder i_EnergyInformation)
         {
             Electric energyType = (Electric)i_VehicleInGarageToWorkOn.OwnerVehicle.EnergyType;
-            float amountOfEnergyLeftInBatteryInHours = energyType.TimeLeftOnBatteryInHours;
+            float amountOfEnergyLeftInBatteryInHours = energyType.CurrentAmountOfEnergy;
             i_EnergyInformation.AppendLine(string.Format("It uses an electric battery and has {0} hours left in it", amountOfEnergyLeftInBatteryInHours));
         }
 
@@ -34,7 +34,7 @@ namespace Ex03.GarageLogic
         {
             Fuel energyType = (Fuel)i_VehicleInGarageToWorkOn.OwnerVehicle.EnergyType;
             string fuelType = Enum.GetName(typeof(Fuel.eFuelType), energyType.FuelType);
-            float amountLeftInTankInLiters = energyType.AmountOfFuelInTankInLiters;
+            float amountLeftInTankInLiters = energyType.CurrentAmountOfEnergy;
             i_EnergyInformation.AppendLine(string.Format("It uses Fuel type {0} and has {1} liters left in the tank", fuelType, amountLeftInTankInLiters));
         }
 
@@ -123,15 +123,15 @@ namespace Ex03.GarageLogic
         {
             StringBuilder vehicleSpecificInformation = new StringBuilder();
 
-            if (i_VehicleInGarageToWorkOn.OwnerVehicle.GetType() == typeof(Car))
+            if (i_VehicleInGarageToWorkOn.OwnerVehicle is Car)
             {
                 getCarInformation(i_VehicleInGarageToWorkOn, vehicleSpecificInformation);
             }
-            else if (i_VehicleInGarageToWorkOn.OwnerVehicle.GetType() == typeof(Bike))
+            else if (i_VehicleInGarageToWorkOn.OwnerVehicle is Bike)
             {
                 getBikeInformation(i_VehicleInGarageToWorkOn, vehicleSpecificInformation);
             }
-            else if(i_VehicleInGarageToWorkOn.OwnerVehicle.GetType() == typeof(Truck))
+            else if(i_VehicleInGarageToWorkOn.OwnerVehicle is Truck)
             {
                 getTruckInformation(i_VehicleInGarageToWorkOn, vehicleSpecificInformation);
             }
@@ -143,7 +143,7 @@ namespace Ex03.GarageLogic
         {
             StringBuilder energyInformation = new StringBuilder();
 
-            if (i_VehicleInGarageToWorkOn.OwnerVehicle.EnergyType.GetType() == typeof(Fuel))
+            if (i_VehicleInGarageToWorkOn.OwnerVehicle.EnergyType is Fuel)
             {
                 getFuelInformation(i_VehicleInGarageToWorkOn, energyInformation);
             }
@@ -179,7 +179,7 @@ namespace Ex03.GarageLogic
             Electric ownerBattery = (Electric)ownerVehicle.OwnerVehicle.EnergyType;
 
             ownerVehicle.OwnerVehicle.EnergyType.AddEnergy(parametersForEnergyCharging);
-            ownerVehicle.OwnerVehicle.PercentOfEnergyLeft = calculateNewPrecanteOfEnergy(ownerBattery.MaxTimeInBatteryInHours, ownerBattery.TimeLeftOnBatteryInHours);
+            ownerVehicle.OwnerVehicle.PercentOfEnergyLeft = calculateNewPrecanteOfEnergy(ownerBattery.MaxAmountOfEnergy, ownerBattery.CurrentAmountOfEnergy);
         }
 
         public void FuelNumberOfLitersToFuelBasedVehicle(string i_VehicleLicenseNumber, string i_TypeOfFuel, float i_LitersOfFuelToFill)
@@ -203,7 +203,7 @@ namespace Ex03.GarageLogic
             Fuel ownerFuelTank = (Fuel)ownerVehicle.OwnerVehicle.EnergyType;
 
             ownerVehicle.OwnerVehicle.EnergyType.AddEnergy(parametersForEnergyCharging);
-            ownerVehicle.OwnerVehicle.PercentOfEnergyLeft = calculateNewPrecanteOfEnergy(ownerFuelTank.MaxCapacityOfFuelTankInLiters, ownerFuelTank.AmountOfFuelInTankInLiters);
+            ownerVehicle.OwnerVehicle.PercentOfEnergyLeft = calculateNewPrecanteOfEnergy(ownerFuelTank.MaxAmountOfEnergy, ownerFuelTank.CurrentAmountOfEnergy);
         }
 
         public void ChangeInGargeStateOfVehicle(string i_VehicleLicenseNumber, string i_NewInGargeStateOfVehicle)

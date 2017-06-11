@@ -7,6 +7,30 @@ namespace Ex03.GarageLogic
     {
         internal const string k_ValueType = "EnergyType";
         internal const string k_ValueToAdd = "Value";
+        protected float m_MaxAmountOfEnergy;
+        protected float m_CurrentAmountOfEnergy;
+
+        public Energy(float i_MaxAmountOfEnergy, float i_CurrentAmountOfEnergy)
+        {
+            m_CurrentAmountOfEnergy = i_CurrentAmountOfEnergy;
+            m_MaxAmountOfEnergy = i_MaxAmountOfEnergy;
+        }
+
+        public float CurrentAmountOfEnergy
+        {
+            get
+            {
+                return m_CurrentAmountOfEnergy;
+            }
+        }
+
+        public float MaxAmountOfEnergy
+        {
+            get
+            {
+                return m_MaxAmountOfEnergy;
+            }
+        }
 
         internal abstract void AddEnergy(Dictionary<string, object> i_ValuesToAddEnergy);
 
