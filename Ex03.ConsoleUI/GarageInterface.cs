@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text;
 
 namespace Ex03.ConsoleUI
 {
@@ -8,6 +9,8 @@ namespace Ex03.ConsoleUI
         private const int k_MinimumOptionIndex = 0;
         private const int k_MaximumOptionIndex = 7;
         private const int k_IndicatorOfAnError = -1;
+        private const string k_startOfQuestionSelectingVehicleType = "Please select your vehicle type from the following: ";
+        private const string k_FieldQuestion = "Please enter";
 
         internal static Program.eFunctionalityOptionsOfGarageProgram GetFunctionalityFromUser()
         {
@@ -152,7 +155,7 @@ To Quit enter: {7}",
 
         internal static string GetVehicleNewStateInGarageFromUser()
         {
-            Console.WriteLine("Please enter the new garage state of the vehicle:");
+            Console.WriteLine("Please enter the state of the vehicle in the garage:");
 
             return Console.ReadLine();
         }
@@ -188,52 +191,18 @@ To Quit enter: {7}",
             return isAnsweredYes;
         }
 
-        internal static string GetVehicleModelNameFromUser()
+        internal static string GetVehicleTypeFromUser(List<string> i_ListOfPossibleVehicleTypes)
         {
-            Console.WriteLine("Please enter the model name of the vehicle:");
+            StringBuilder questionForUser = new StringBuilder();
 
-            return Console.ReadLine();
-        }
+            questionForUser.Append(k_startOfQuestionSelectingVehicleType);
 
-        internal static string GetVehicleOwnerNameFromUser()
-        {
-            Console.WriteLine("Please enter the owner name of the vehicle:");
+            foreach (string possibleVehicleType in i_ListOfPossibleVehicleTypes)
+            {
+                questionForUser.Append(string.Format("{0} ", possibleVehicleType));
+            }
 
-            return Console.ReadLine();
-        }
-
-        internal static string GetVehicleOwnerPhoneNumberFromUser()
-        {
-            Console.WriteLine("Please enter the phone number of the vehicle owner:");
-
-            return Console.ReadLine();
-        }
-
-        internal static float GetVehiclePercentageOfEnergyLeftFromUser()
-        {
-            Console.WriteLine("Please enter the percentage of energy left in vehicle energy source:");
-
-            return GetValidFloatInRange(
-                "Wrong input! the percentage of energy left should be a float between 0 to 100, please insert valid input:",
-                Program.k_MimimumPercentOfRemiaingEnergy,
-                Program.k_MaximumPercentOfRemiaingEnergy);
-        }
-
-        internal static string GetVehicleTypeFromUser()
-        {
-            string printToUser = "";
-            List<string> optionalValues = new List<string>();
-
-            optionalValues.Add(Program.k_CarType);
-            optionalValues.Add(Program.k_BikeType);
-            optionalValues.Add(Program.k_TruckType);
-            printToUser = string.Format(
-    @"Please enter the vehicle type:
-{0}, {1}, {2}
-Your input:",
-optionalValues);
-
-            return getStringWithLimitOnTheInputFromUser(printToUser, optionalValues);
+            return getStringWithLimitOnTheInputFromUser(questionForUser.ToString(), i_ListOfPossibleVehicleTypes);
         }
 
         private static string getStringWithLimitOnTheInputFromUser(string i_MessageToPrint, List<string> i_OptionalValues)
@@ -258,174 +227,18 @@ optionalValues);
             return inputFromUser;
         }
 
-        internal static string GetCarColorFromUser()
+        internal static Dictionary<string, object> getParametersForFactoryFromUser(List<string> i_NameOfFieldsPerVehicle)
         {
-            List<string> optionalValues = new List<string>();
+            Dictionary<string, object> parametersForFactory = new Dictionary<string, object>();
 
-            optionalValues.Add(Program.k_CarColorWhite);
-            optionalValues.Add(Program.k_CarColorBlue);
-            optionalValues.Add(Program.k_CarColorBlack);
-            optionalValues.Add(Program.k_CarColorYellow);
-            string printToUser = string.Format(
-@"Please enter the car color select from:
-{0}, {1}, {2}, {3}
-Your input:",
-            optionalValues);
-
-            return getStringWithLimitOnTheInputFromUser(printToUser, optionalValues);
-        }
-
-        internal static int GetCarNumberOfDoorsFromUser()
-        {
-            string stringNumberOfDoorsFromUser;
-            int numberOfDoorsFromUse = k_IndicatorOfAnError;
-            bool parseSucceed = false;
-            List<string> optionalValues = new List<string>();
-
-            optionalValues.Add(Program.k_NumberOfDoorsTwo);
-            optionalValues.Add(Program.k_NumberOfDoorsThree);
-            optionalValues.Add(Program.k_NumberOfDoorsFour);
-            optionalValues.Add(Program.k_NumberOfDoorsFive);
-            string printToUser = string.Format(
-@"Please enter the car number of doors from:
-{0}, {1}, {2}, {3}
-Your input:",
-            optionalValues);
-            while (!parseSucceed)
+            foreach (string key in i_NameOfFieldsPerVehicle)
             {
-                stringNumberOfDoorsFromUser = getStringWithLimitOnTheInputFromUser(printToUser, optionalValues);
-                parseSucceed = int.TryParse(stringNumberOfDoorsFromUser, out numberOfDoorsFromUse);
+                ShowThisStringAsOutput(string.Format("{0} {1}:", k_FieldQuestion, key));
+                string answerFromUser = Console.ReadLine();
+                parametersForFactory.Add(key, answerFromUser);
             }
 
-            return numberOfDoorsFromUse;
-        }
-
-        internal static string GetVehicleEnergyTypeFromUser()
-        {
-            List<string> optionalValues = new List<string>();
-
-            optionalValues.Add(Program.k_ElectricType);
-            optionalValues.Add(Program.k_FuelType);
-            string printToUser = string.Format(
-@"Please enter the energy type of the vehicle:
-{0}, {1}
-Your input:",
-            optionalValues);
-
-            return getStringWithLimitOnTheInputFromUser(printToUser, optionalValues);
-        }
-
-        internal static string GetBikeTypeOfLicenceFromUser()
-        {
-            List<string> optionalValues = new List<string>();
-
-            optionalValues.Add(Program.k_BikeLicenseTypeA);
-            optionalValues.Add(Program.k_BikeLicenseTypeAB);
-            optionalValues.Add(Program.k_BikeLicenseTypeATwo);
-            optionalValues.Add(Program.k_BikeLicenseTypeBOne);
-            string printToUser = string.Format(
-@"Please enter the bike license type select from:
-{0}, {1}, {2}, {3}
-Your input:",
-            optionalValues);
-
-            return getStringWithLimitOnTheInputFromUser(printToUser, optionalValues);
-        }
-
-        internal static List<string> GetListOfWheelsMakerFromUser(int i_NumberOfWheels)
-        {
-            List<string> wheelsMakersNames = new List<string>();
-
-            for (int i = 1; i <= i_NumberOfWheels; i++)
-            {
-                Console.WriteLine(string.Format(@"Please enter the {0}'th wheel manufacturer's name:"), i);
-                wheelsMakersNames.Add(Console.ReadLine());
-            }
-
-            return wheelsMakersNames;
-        }
-
-        internal static List<float> GetListOfWheelsPressuresFromUser(int i_NumberOfWheels, float i_MinAirPressure, float i_MaxAirPressure)
-        {
-            List<float> wheelsAirPressures = new List<float>();
-
-            for (int i = 1; i <= i_NumberOfWheels; i++)
-            {
-                Console.WriteLine(string.Format(@"Please enter the {0}'th wheel current air pressure:"), i);
-                wheelsAirPressures.Add(GetValidFloatInRange(
-                    string.Format(
-                       @"Wrong input! Air Pressure should be float between {0} to {1} please enter new input:",
-                       i_MinAirPressure,
-                       i_MaxAirPressure),
-                i_MinAirPressure, i_MaxAirPressure));
-            }
-            
-            return wheelsAirPressures;
-        }
-
-        internal static int GetBikeEngineVolume(int k_MinimumEngineVolume)
-        {
-            return getPositiveInt("Please enter bike engine volume:");
-        }
-
-        private static float GetValidFloatInRange(string i_MessageToUser, float i_MinAirPressure, float i_MaxAirPressure)
-        {
-            string currentInputStringFromUser;
-            float ValidFloatToReturn = k_IndicatorOfAnError;
-            bool isInRange = false;
-            bool isParseToFloatSucceed = false;
-
-            while (!isInRange)
-            {
-                currentInputStringFromUser = Console.ReadLine();
-                isParseToFloatSucceed = float.TryParse(currentInputStringFromUser, out ValidFloatToReturn);
-                if (isParseToFloatSucceed)
-                {
-                    isInRange = isBetweenMinimumAndMaximumIncludes(ValidFloatToReturn, i_MinAirPressure, i_MaxAirPressure);
-                }
-                if (!isInRange)
-                {
-                    Console.WriteLine(i_MessageToUser); 
-                }
-            }
-
-            return ValidFloatToReturn;
-        }
-
-
-        internal static int GetMaxCargoWeightFromUser(int k_MinimumCargoWeight)
-        {
-            return getPositiveInt("Please enter maximum cargo weight of truck:");
-        }
-
-        private static int getPositiveInt(string i_MessageToUser)
-        {
-            bool isParseToIntSucceed = false;
-            int validIntToReturn = k_IndicatorOfAnError;
-
-            while (!isParseToIntSucceed)
-            {
-                Console.WriteLine(i_MessageToUser);
-                isParseToIntSucceed = int.TryParse(Console.ReadLine(), out validIntToReturn);
-                if (isParseToIntSucceed && validIntToReturn > 0)
-                {
-                    isParseToIntSucceed = true;
-                }
-                else
-                {
-                    Console.WriteLine("Wrong input! should be integer and positive");
-                }
-            }
-
-            return validIntToReturn;
-        }
-
-        internal static bool GetHasDangerousCargoKeyFromUser()
-        {
-            
-            Console.WriteLine("Please enter 1 if the cargo is dangerous else press enter:");
-            string userInput = Console.ReadLine();
-            return (checkIfUserAnswerYesOnBooleanQuestion(userInput));
+            return parametersForFactory;
         }
     }
 }

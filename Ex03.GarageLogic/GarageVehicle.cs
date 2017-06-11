@@ -2,6 +2,8 @@
 {
     internal class GarageVehicle
     {
+        internal const string k_OwnerNameKey = "Owner Name";
+        internal const string k_OwnerPhoneNumberKey = "Owner Phone Number";
         private eVehicleState m_VehicleState;
         private string m_OwnerName;
         private string m_OwnerPhoneNumber;

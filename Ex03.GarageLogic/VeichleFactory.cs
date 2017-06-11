@@ -25,18 +25,17 @@ namespace Ex03.GarageLogic
         private const Fuel.eFuelType k_BikeFuelType = Fuel.eFuelType.Octan95;
         private const float k_MaxBatterySizeInBike = (float)2.7;
 
-        internal const string k_CurrentEnergyLevelKey = "CurrentEnergy";
-        internal const string k_CurrentPressureInWheelsKey = "CurrentPressureInWheels";
-        internal const string k_HasDangerousCargoKey = "HasDangerousCargo";
-        internal const string k_WheelMakerKey = "WheelMaker";
-        internal const string k_MaxCargoWeightForTruckKey = "MaxCargoWeight";
-        internal const string k_ModelNameKey = "ModelName";
-        internal const string k_LicenceNumberKey = "LicenceNumber";
-        internal const string k_PercentOfEnergyLeftKey = "PercentOfEnergyLeft";
-        internal const string k_NumberOfDoorsInCarKey = "NumberOfDoorsInCar";
-        internal const string k_CarColorKey = "CarColor";
-        internal const string k_TypeOfLicenceKey = "TypeOfLicence";
-        internal const string k_EngineVolumeKey = "EngineVolume";
+        internal const string k_CurrentEnergyLevelKey = "Current Energy Level";
+        internal const string k_CurrentPressureInWheelsKey = "Current Pressure In Wheels";
+        internal const string k_HasDangerousCargoKey = "Has Dangerous Cargo";
+        internal const string k_WheelMakerKey = "Wheel Maker";
+        internal const string k_MaxCargoWeightForTruckKey = "Max Cargo Weight";
+        internal const string k_ModelNameKey = "Model Name";
+        internal const string k_PercentOfEnergyLeftKey = "Percent Of Energy Left";
+        internal const string k_NumberOfDoorsInCarKey = "Number Of Doors In Car";
+        internal const string k_CarColorKey = "Car Color";
+        internal const string k_TypeOfLicenceKey = "Type Of Licence";
+        internal const string k_EngineVolumeKey = "Engine Volume";
 
         internal static Vehicle CreateNewVeichle(ePossibleVehicleTypes veichleType, Dictionary<string, object> i_VeichleCharaterstic)
         {
@@ -105,7 +104,7 @@ namespace Ex03.GarageLogic
         private static void getVehicleParameters(Dictionary<string, object> i_VeichleCharaterstic, out string o_ModelName, out string o_LicenceNumber, out float o_PercentOfEnergyLeft)
         {
             o_ModelName = getStringFromDict(i_VeichleCharaterstic, k_ModelNameKey);
-            o_LicenceNumber = getStringFromDict(i_VeichleCharaterstic, k_LicenceNumberKey);
+            o_LicenceNumber = getStringFromDict(i_VeichleCharaterstic, Garage.k_LicenceNumberKey);
             o_PercentOfEnergyLeft = getFloatFromDict(i_VeichleCharaterstic, k_PercentOfEnergyLeftKey);
         }
 

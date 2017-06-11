@@ -6,6 +6,7 @@ namespace Ex03.GarageLogic
 {
     public class Garage
     {
+        public const string k_LicenceNumberKey = "LicenceNumber";
         private const float k_MultiplyByHundredToTurnIntoPrecantage = 100;
         private const string k_HasDangerousCargoForTruck = "carries";
         private const string k_DoesNotHaveDangerousCargoForTruck = "does not carry";
@@ -153,6 +154,59 @@ namespace Ex03.GarageLogic
             }
 
             return energyInformation.ToString();
+        }
+
+        public List<string> GetListOfPossibleVehicles()
+        {
+            List<string> listOfPossibleVehicles = new List<string>();
+
+            listOfPossibleVehicles.AddRange(Enum.GetNames(typeof(VeichleFactory.ePossibleVehicleTypes)));
+
+            return listOfPossibleVehicles;
+        }
+
+        public List<string> GetParametersDict(string newVehicleType)
+        {
+            List<string> parametersForTheUserAccordingToVehicleType = new List<string>();
+
+            insertDefaultFieldsToList(parametersForTheUserAccordingToVehicleType);
+
+            VeichleFactory.ePossibleVehicleTypes vehicleType = (VeichleFactory.ePossibleVehicleTypes)Enum.Parse(typeof(VeichleFactory.ePossibleVehicleTypes), newVehicleType);
+
+            switch (vehicleType)
+            {
+                case VeichleFactory.ePossibleVehicleTypes.FuelBike:
+                    parametersForTheUserAccordingToVehicleType.Add(VeichleFactory.k_TypeOfLicenceKey);
+                    parametersForTheUserAccordingToVehicleType.Add(VeichleFactory.k_EngineVolumeKey);
+                    break;
+                case VeichleFactory.ePossibleVehicleTypes.ElectricBike:
+                    goto case VeichleFactory.ePossibleVehicleTypes.FuelBike;
+                case VeichleFactory.ePossibleVehicleTypes.FuelCar:
+                    parametersForTheUserAccordingToVehicleType.Add(VeichleFactory.k_CarColorKey);
+                    parametersForTheUserAccordingToVehicleType.Add(VeichleFactory.k_NumberOfDoorsInCarKey);
+                    break;
+                case VeichleFactory.ePossibleVehicleTypes.ElectricCar:
+                    goto case VeichleFactory.ePossibleVehicleTypes.FuelCar;
+                case VeichleFactory.ePossibleVehicleTypes.FuelTruck:
+                    parametersForTheUserAccordingToVehicleType.Add(VeichleFactory.k_MaxCargoWeightForTruckKey);
+                    parametersForTheUserAccordingToVehicleType.Add(VeichleFactory.k_HasDangerousCargoKey);
+                    break;
+                default:
+                    break;
+            }
+
+            return parametersForTheUserAccordingToVehicleType;
+        }
+
+        private static void insertDefaultFieldsToList(List<string> parametersForTheUserAccordingToVehicleType)
+        {
+            parametersForTheUserAccordingToVehicleType.Add(GarageVehicle.k_OwnerNameKey);
+            parametersForTheUserAccordingToVehicleType.Add(GarageVehicle.k_OwnerPhoneNumberKey);
+            parametersForTheUserAccordingToVehicleType.Add(VeichleFactory.k_WheelMakerKey);
+            parametersForTheUserAccordingToVehicleType.Add(VeichleFactory.k_PercentOfEnergyLeftKey);
+            parametersForTheUserAccordingToVehicleType.Add(VeichleFactory.k_ModelNameKey);
+            parametersForTheUserAccordingToVehicleType.Add(VeichleFactory.k_CurrentPressureInWheelsKey);
+            parametersForTheUserAccordingToVehicleType.Add(VeichleFactory.k_CurrentEnergyLevelKey);
         }
 
         public bool IsVehicleInThisGarage(string i_VehicleLicenseNumber)
