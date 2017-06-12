@@ -318,11 +318,102 @@ namespace Ex03.GarageLogic
             }
         }
 
-
-        //TODO
-        public void InsertNewVehicle(Dictionary<string, object> newVehicleData)
+        public void InsertNewVehicle(Dictionary<string, string> i_NewVehicleData, string i_VehicleType)
         {
-            throw new NotImplementedException();
+            Dictionary<string, object> parametersForFactory = new Dictionary<string, object>();
+            foreach (string key in i_NewVehicleData.Keys)
+            {
+                validateAndInsertToParametersDict(parametersForFactory, i_NewVehicleData, key);
+            }
+      
+            VeichleFactory.ePossibleVehicleTypes typeOfVehicleToCreate = (VeichleFactory.ePossibleVehicleTypes)Enum.Parse(typeof(VeichleFactory.ePossibleVehicleTypes), i_VehicleType);
+            Vehicle ownerVehicle = VeichleFactory.CreateNewVeichle(typeOfVehicleToCreate, parametersForFactory);
+
+            GarageVehicle newVehicleInGarage = new GarageVehicle(i_NewVehicleData[GarageVehicle.k_OwnerNameKey], i_NewVehicleData[GarageVehicle.k_OwnerPhoneNumberKey], ownerVehicle);
+
+            m_VehiclesInGarage.Add(i_NewVehicleData[k_LicenceNumberKey],newVehicleInGarage);
+        }
+
+        private void validateAndInsertToParametersDict(Dictionary<string, object> parametersForFactory, Dictionary<string, string> parametersFromUser, string key)
+        {
+            if (key.Equals(VeichleFactory.k_CarColorKey))
+            {
+                try
+                {
+                    Car.ePossibleCarColors newValueToEnterToDict = (Car.ePossibleCarColors)Enum.Parse(typeof(Car.ePossibleCarColors), parametersFromUser[key]);
+                    parametersForFactory.Add(key, newValueToEnterToDict);
+                }
+                catch (OverflowException)
+                {
+
+                    throw new FormatException("Wrong Car Color");
+                }
+                
+            }
+            else if (key.Equals(VeichleFactory.k_CurrentEnergyLevelKey) 
+                || key.Equals(VeichleFactory.k_CurrentPressureInWheelsKey) 
+                || key.Equals(VeichleFactory.k_CurrentPressureInWheelsKey) 
+                || key.Equals(VeichleFactory.k_MaxCargoWeightForTruckKey) 
+                || key.Equals(VeichleFactory.k_PercentOfEnergyLeftKey))
+            {
+                float newValueToEnterToDict;
+                bool didParseWork =  float.TryParse(parametersFromUser[key], out newValueToEnterToDict);
+                parametersForFactory.Add(key, newValueToEnterToDict);
+                if (!didParseWork)
+                {
+                    throw new ArgumentException(string.Format("Wrong {0} Type! Must be a Decimal Number!", key));
+                }
+            }
+            else if (key.Equals(VeichleFactory.k_EngineVolumeKey))
+            {
+                int newValueToEnterToDict;
+                bool didParseWork = int.TryParse(parametersFromUser[key], out newValueToEnterToDict);
+                parametersForFactory.Add(key, newValueToEnterToDict);
+                if (!didParseWork)
+                {
+                    throw new ArgumentException(string.Format("Wrong {0} Type! Must be an Integer Number!", key));
+                }
+            }
+            else if (key.Equals(VeichleFactory.k_HasDangerousCargoKey))
+            {
+                bool newValueToEnterToDict;
+                bool didParseWork = bool.TryParse(parametersFromUser[key], out newValueToEnterToDict);
+                parametersForFactory.Add(key, newValueToEnterToDict);
+                if (!didParseWork)
+                {
+                    throw new ArgumentException(string.Format("Wrong {0} Type! Must be an Integer Number!", key));
+                }
+            }
+            else if (key.Equals(VeichleFactory.k_NumberOfDoorsInCarKey)){
+                try
+                {
+                    Car.eNumberOfDoors newValueToEnterToDict = (Car.eNumberOfDoors)Enum.Parse(typeof(Car.eNumberOfDoors), parametersFromUser[key]);
+                    parametersForFactory.Add(key, newValueToEnterToDict);
+                }
+                catch (OverflowException)
+                {
+
+                    throw new FormatException("Wrong Number Of Doors");
+                }
+            }
+            else if (key.Equals(VeichleFactory.k_TypeOfLicenceKey))
+            {
+                try
+                {
+                    Bike.eTypeOfLicence newValueToEnterToDict = (Bike.eTypeOfLicence)Enum.Parse(typeof(Bike.eTypeOfLicence), parametersFromUser[key]);
+                    parametersForFactory.Add(key, newValueToEnterToDict);
+                }
+                catch (OverflowException)
+                {
+
+                    throw new FormatException("Wrong Licence Type");
+                }
+            }
+            else
+            {
+                string newValueToEnterToDict = parametersFromUser[key];
+                parametersForFactory.Add(key, newValueToEnterToDict);
+            }
         }
     }
 }

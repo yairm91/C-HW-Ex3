@@ -174,13 +174,13 @@ namespace Ex03.ConsoleUI
                 List<string> listOfPossibleVehicleTypes = io_ThisGarage.GetListOfPossibleVehicles();
                 string newVehicleType = GarageInterface.GetVehicleTypeFromUser(listOfPossibleVehicleTypes);
                 List<string> nameOfRequiredFieldsByVehicle = io_ThisGarage.GetParametersDict(newVehicleType);
-                Dictionary<string, object> parametersForFactory = GarageInterface.getParametersForFactoryFromUser(nameOfRequiredFieldsByVehicle);
+                Dictionary<string, string> parametersForFactory = GarageInterface.getParametersForFactoryFromUser(nameOfRequiredFieldsByVehicle);
 
                 parametersForFactory.Add(Garage.k_LicenceNumberKey, vehicleLicenseNumber);
 
                 try
                 {
-                    io_ThisGarage.InsertNewVehicle(parametersForFactory);
+                    io_ThisGarage.InsertNewVehicle(parametersForFactory, newVehicleType);
                     GarageInterface.SendSucsses();
                 }
                 catch (FormatException formatException)
@@ -195,8 +195,6 @@ namespace Ex03.ConsoleUI
                 {
                     GarageInterface.ShowThisStringAsOutput(outOfRangeException.Message);
                 }
-
-
             }
         }
 

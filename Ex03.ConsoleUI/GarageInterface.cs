@@ -227,9 +227,9 @@ To Quit enter: {7}",
             return inputFromUser;
         }
 
-        internal static Dictionary<string, object> getParametersForFactoryFromUser(List<string> i_NameOfFieldsPerVehicle)
+        internal static Dictionary<string, string> getParametersForFactoryFromUser(List<string> i_NameOfFieldsPerVehicle)
         {
-            Dictionary<string, object> parametersForFactory = new Dictionary<string, object>();
+            Dictionary<string, string> parametersForFactory = new Dictionary<string, string>();
 
             foreach (string key in i_NameOfFieldsPerVehicle)
             {
