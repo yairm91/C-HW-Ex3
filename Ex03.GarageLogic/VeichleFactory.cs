@@ -26,9 +26,9 @@ namespace Ex03.GarageLogic
         private const float k_MaxBatterySizeInBike = (float)2.7;
 
         internal const string k_CurrentEnergyLevelKey = "Current Energy Level";
-        internal const string k_CurrentPressureInWheelsKey = "Current Pressure In Wheels";
+        internal const string k_CurrentPressureInWheelsKey = "Current Pressure In Wheels divided by , like '25,21,25,19'";
         internal const string k_HasDangerousCargoKey = "Has Dangerous Cargo";
-        internal const string k_WheelMakerKey = "Wheel Maker";
+        internal const string k_WheelMakerKey = "The Wheel Makers divided by , like 'audi,seat,ford,audi'";
         internal const string k_MaxCargoWeightForTruckKey = "Max Cargo Weight";
         internal const string k_ModelNameKey = "Model Name";
         internal const string k_PercentOfEnergyLeftKey = "Percent Of Energy Left";
@@ -229,7 +229,7 @@ namespace Ex03.GarageLogic
 
         private static List<Wheel> createWheelsList(Dictionary<string, object> i_VehicleCharaterstic, int i_numberOfWheels, float i_MaxAirPressureInWheel)
         {
-            List<float> currentAirPressureInWheels = getFloatListFromDict(i_VehicleCharaterstic, k_CurrentPressureInWheelsKey);
+            List<float> currentAirPressureInWheels = getFloatListFromDict(i_VehicleCharaterstic, k_CurrentPressureInWheelsKey, i_MaxAirPressureInWheel);
             List<string> wheelMakerName = getStringListFromDict(i_VehicleCharaterstic, k_WheelMakerKey);
             List<Wheel> wheels = createWheels(wheelMakerName, i_numberOfWheels, i_MaxAirPressureInWheel, currentAirPressureInWheels);
             return wheels;
@@ -253,6 +253,10 @@ namespace Ex03.GarageLogic
         private static Energy createEnergySource(Dictionary<string, object> i_VehicleCharaterstic, float i_MaxBatterySize)
         {
             float currentEnergyLevel = getFloatFromDict(i_VehicleCharaterstic, k_CurrentEnergyLevelKey);
+            if (currentEnergyLevel > i_MaxBatterySize)
+            {
+                throw new ArgumentException("You entered more electricity than the maximum.");
+            }
             Energy energyType = createEnergyByType(currentEnergyLevel, i_MaxBatterySize);
             return energyType;
         }
@@ -260,6 +264,10 @@ namespace Ex03.GarageLogic
         private static Energy createEnergySource(Dictionary<string, object> i_VehicleCharaterstic, float i_MaxTankSize, Fuel.eFuelType i_FuelType)
         {
             float currentEnergyLevel = getFloatFromDict(i_VehicleCharaterstic, k_CurrentEnergyLevelKey);
+            if(currentEnergyLevel > i_MaxTankSize)
+            {
+                throw new ArgumentException("You entered more fuel than the maximum.");
+            }
             Energy energyType = createEnergyByType(currentEnergyLevel, i_MaxTankSize, i_FuelType);
             return energyType;
         }
@@ -292,7 +300,7 @@ namespace Ex03.GarageLogic
             return stringInStringForm;
         }
 
-        private static List<float> getFloatListFromDict(Dictionary<string, object> i_VehicleCharaterstic, string i_Key)
+        private static List<float> getFloatListFromDict(Dictionary<string, object> i_VehicleCharaterstic, string i_Key, float i_MaxAirPressureInWheel)
         {
             bool didGetWork;
             object valueOfListInObjectForm;
@@ -303,6 +311,14 @@ namespace Ex03.GarageLogic
             }
 
             List<float> listInListForm = (List<float>) valueOfListInObjectForm;
+
+            foreach (float airPressureInWheel in listInListForm)
+            {
+                if (airPressureInWheel > i_MaxAirPressureInWheel)
+                {
+                    throw new ArgumentException("You entered more air pressure than the max!");
+                }
+            }
 
             return listInListForm;
         }

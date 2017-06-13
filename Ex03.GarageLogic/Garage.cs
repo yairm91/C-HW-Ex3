@@ -10,6 +10,7 @@ namespace Ex03.GarageLogic
         private const float k_MultiplyByHundredToTurnIntoPrecantage = 100;
         private const string k_HasDangerousCargoForTruck = "carries";
         private const string k_DoesNotHaveDangerousCargoForTruck = "does not carry";
+        private readonly char[] k_SplitAccordingToThisDelimiter = { ',' };
         private Dictionary<string, GarageVehicle> m_VehiclesInGarage;
 
         public Garage()
@@ -350,9 +351,7 @@ namespace Ex03.GarageLogic
                 }
                 
             }
-            else if (key.Equals(VeichleFactory.k_CurrentEnergyLevelKey) 
-                || key.Equals(VeichleFactory.k_CurrentPressureInWheelsKey) 
-                || key.Equals(VeichleFactory.k_CurrentPressureInWheelsKey) 
+            else if (key.Equals(VeichleFactory.k_CurrentEnergyLevelKey)
                 || key.Equals(VeichleFactory.k_MaxCargoWeightForTruckKey) 
                 || key.Equals(VeichleFactory.k_PercentOfEnergyLeftKey))
             {
@@ -363,6 +362,24 @@ namespace Ex03.GarageLogic
                 {
                     throw new ArgumentException(string.Format("Wrong {0} Type! Must be a Decimal Number!", key));
                 }
+            }
+            else if (key.Equals(VeichleFactory.k_CurrentPressureInWheelsKey))
+            {
+                List<float> newValueToEnterToDict = new List<float>();
+                string[] parametersFromUserDivided = parametersFromUser[key].Split(k_SplitAccordingToThisDelimiter);
+                foreach (string airPressure in parametersFromUserDivided)
+                {
+                    float tempAirPressurePlaceHolder;
+                    bool didParseWork = float.TryParse(airPressure, out tempAirPressurePlaceHolder);
+
+                    if (!didParseWork)
+                    {
+                        throw new ArgumentException(string.Format("Wrong {0} Type! Must be a Decimal Number!", key));
+                    }
+                    newValueToEnterToDict.Add(tempAirPressurePlaceHolder);
+                }
+         
+                parametersForFactory.Add(key, newValueToEnterToDict);
             }
             else if (key.Equals(VeichleFactory.k_EngineVolumeKey))
             {
@@ -408,6 +425,13 @@ namespace Ex03.GarageLogic
 
                     throw new FormatException("Wrong Licence Type");
                 }
+            }
+            else if (key.Equals(VeichleFactory.k_WheelMakerKey))
+            {
+                List<string> newValueToEnterToDict = new List<string>();
+                string[] parametersFromUserDivided = parametersFromUser[key].Split(k_SplitAccordingToThisDelimiter);
+                newValueToEnterToDict.AddRange(parametersFromUserDivided);
+                parametersForFactory.Add(key, newValueToEnterToDict);
             }
             else
             {

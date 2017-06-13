@@ -49,6 +49,7 @@ namespace Ex03.GarageLogic
             m_LicenceNumber = i_LicenceNumber;
             m_ModelName = i_ModelName;
             m_PercentOfEnergyLeft = i_PercentOfEnergyLeft;
+            m_Wheels = new List<Wheel>();
             m_Wheels.AddRange(i_Wheels);
         }
 
