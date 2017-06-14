@@ -25,6 +25,9 @@ namespace Ex03.GarageLogic
         private const Fuel.eFuelType k_BikeFuelType = Fuel.eFuelType.Octan95;
         private const float k_MaxBatterySizeInBike = (float)2.7;
 
+        private const float k_MaxPercentPossible = 100;
+        private const float k_MinPercentPossible = 0;
+
         internal const string k_CurrentEnergyLevelKey = "Current Energy Level";
         internal const string k_CurrentPressureInWheelsKey = "Current Pressure In Wheels divided by , like '25,21,25,19'";
         internal const string k_HasDangerousCargoKey = "Has Dangerous Cargo";
@@ -66,24 +69,24 @@ namespace Ex03.GarageLogic
 
         private static Vehicle createNewBike(Dictionary<string, object> i_VeichleCharaterstic, bool i_UsesFuel)
         {
-            Energy energyType;
-            if (i_UsesFuel)
-            {
-                energyType = createEnergySource(i_VeichleCharaterstic, k_MaxTankSizeInBike, k_BikeFuelType);
-            }
-            else
-            {
-                energyType = createEnergySource(i_VeichleCharaterstic, k_MaxBatterySizeInBike);
-            }
-
-            List<Wheel> wheels = createWheelsList(i_VeichleCharaterstic, k_NumberOfWheelsInBike, k_MaxAirPressureInBikeWheel);
-
             Bike.eTypeOfLicence typeOfLicence;
             int engineVolume;
             float percentOfEnergyLeft;
             string modelName, licenceNumber;
 
             getInputParamtersForBike(i_VeichleCharaterstic, out typeOfLicence, out engineVolume, out modelName, out licenceNumber, out percentOfEnergyLeft);
+
+            Energy energyType;
+            if (i_UsesFuel)
+            {
+                energyType = createEnergySource(percentOfEnergyLeft, k_MaxTankSizeInBike, k_BikeFuelType);
+            }
+            else
+            {
+                energyType = createEnergySource(percentOfEnergyLeft, k_MaxBatterySizeInBike);
+            }
+
+            List<Wheel> wheels = createWheelsList(i_VeichleCharaterstic, k_NumberOfWheelsInBike, k_MaxAirPressureInBikeWheel);
 
             return new Bike(typeOfLicence, engineVolume, modelName, licenceNumber, percentOfEnergyLeft, energyType, wheels);
         }
@@ -98,6 +101,11 @@ namespace Ex03.GarageLogic
         {
             o_TypeOfLicence = getTypeOfLicenceValueFromDict(i_VeichleCharaterstic, k_TypeOfLicenceKey);
             o_EngineVolume = getIntFromDict(i_VeichleCharaterstic, k_EngineVolumeKey);
+            if (o_EngineVolume < 0)
+            {
+                throw new ArgumentException("Engine Volume cannot be negative");
+            }
+
             getVehicleParameters(i_VeichleCharaterstic, out o_ModelName, out o_LicenceNumber, out o_PercentOfEnergyLeft);
         }
 
@@ -106,6 +114,10 @@ namespace Ex03.GarageLogic
             o_ModelName = getStringFromDict(i_VeichleCharaterstic, k_ModelNameKey);
             o_LicenceNumber = getStringFromDict(i_VeichleCharaterstic, Garage.k_LicenceNumberKey);
             o_PercentOfEnergyLeft = getFloatFromDict(i_VeichleCharaterstic, k_PercentOfEnergyLeftKey);
+            if (o_PercentOfEnergyLeft > k_MaxPercentPossible || o_PercentOfEnergyLeft < k_MinPercentPossible)
+            {
+                throw new ArgumentException("You enterd wrong percent of energy left");
+            }
         }
 
         private static int getIntFromDict(Dictionary<string, object> i_VeichleCharaterstic, string i_Key)
@@ -140,24 +152,24 @@ namespace Ex03.GarageLogic
 
         private static Vehicle createNewCar(Dictionary<string, object> i_VehicleCharaterstic, bool i_UsesFuel)
         {
-            Energy energyType;
-            if (i_UsesFuel)
-            {
-                energyType = createEnergySource(i_VehicleCharaterstic, k_MaxTankSizeInCar, k_CarFuelType);
-            }
-            else
-            {
-                energyType = createEnergySource(i_VehicleCharaterstic, k_MaxBatterySizeInCar);
-            }
-
-            List<Wheel> wheels = createWheelsList(i_VehicleCharaterstic, k_NumberOfWheelsInCar, k_MaxAirPressureInCarWheel);
-
             Car.eNumberOfDoors numberOfDoors;
             Car.ePossibleCarColors carColor;
             float percentOfEnergyLeft;
             string modelName, licenceNumber;
 
             getInputParamtersForCar(i_VehicleCharaterstic, out numberOfDoors, out carColor, out modelName, out licenceNumber, out percentOfEnergyLeft);
+
+            Energy energyType;
+            if (i_UsesFuel)
+            {
+                energyType = createEnergySource(percentOfEnergyLeft, k_MaxTankSizeInCar, k_CarFuelType);
+            }
+            else
+            {
+                energyType = createEnergySource(percentOfEnergyLeft, k_MaxBatterySizeInCar);
+            }
+
+            List<Wheel> wheels = createWheelsList(i_VehicleCharaterstic, k_NumberOfWheelsInCar, k_MaxAirPressureInCarWheel);
 
             return new Car(carColor, numberOfDoors, modelName, licenceNumber, percentOfEnergyLeft, energyType, wheels);
         }
@@ -207,22 +219,22 @@ namespace Ex03.GarageLogic
 
         private static Vehicle createNewTruck(Dictionary<string, object> i_VehicleCharaterstic, bool i_UsesFuel)
         {
-            Energy energyType;
-            if (i_UsesFuel)
-            {
-                energyType = createEnergySource(i_VehicleCharaterstic, k_MaxTankSizeInTruck, k_TruckFuelType);
-            }
-            else
-            {
-                energyType = createEnergySource(i_VehicleCharaterstic, k_MaxBatterySizeInTruck);
-            }
-
-            List<Wheel> wheels = createWheelsList(i_VehicleCharaterstic, k_NumberOfWheelsInTruck, k_MaxAirPressureInTruckWheel);
-
             bool hasDangerousCargo;
             float maxCargoWeight, percentOfEnergyLeft;
             string modelName, licenceNumber;
             getInputParamtersForTruck(i_VehicleCharaterstic, out hasDangerousCargo, out maxCargoWeight, out modelName, out licenceNumber, out percentOfEnergyLeft);
+
+            Energy energyType;
+            if (i_UsesFuel)
+            {
+                energyType = createEnergySource(percentOfEnergyLeft, k_MaxTankSizeInTruck, k_TruckFuelType);
+            }
+            else
+            {
+                energyType = createEnergySource(percentOfEnergyLeft, k_MaxBatterySizeInTruck);
+            }
+
+            List<Wheel> wheels = createWheelsList(i_VehicleCharaterstic, k_NumberOfWheelsInTruck, k_MaxAirPressureInTruckWheel);
 
             return new Truck(hasDangerousCargo, maxCargoWeight, modelName, licenceNumber, percentOfEnergyLeft, energyType, wheels);
         }
@@ -230,6 +242,11 @@ namespace Ex03.GarageLogic
         private static List<Wheel> createWheelsList(Dictionary<string, object> i_VehicleCharaterstic, int i_numberOfWheels, float i_MaxAirPressureInWheel)
         {
             List<float> currentAirPressureInWheels = getFloatListFromDict(i_VehicleCharaterstic, k_CurrentPressureInWheelsKey, i_MaxAirPressureInWheel);
+            if(currentAirPressureInWheels.Count != i_numberOfWheels)
+            {
+                throw new ArgumentException(string.Format("Wrong Amount of Wheels, this vehicle needs {0} wheels.", i_numberOfWheels));
+            }
+
             List<string> wheelMakerName = getStringListFromDict(i_VehicleCharaterstic, k_WheelMakerKey);
             List<Wheel> wheels = createWheels(wheelMakerName, i_numberOfWheels, i_MaxAirPressureInWheel, currentAirPressureInWheels);
             return wheels;
@@ -250,24 +267,26 @@ namespace Ex03.GarageLogic
             return listInListForm;
         }
 
-        private static Energy createEnergySource(Dictionary<string, object> i_VehicleCharaterstic, float i_MaxBatterySize)
+        private static Energy createEnergySource(float i_CurrentPercentOfElectricity, float i_MaxBatterySize)
         {
-            float currentEnergyLevel = getFloatFromDict(i_VehicleCharaterstic, k_CurrentEnergyLevelKey);
+            float currentEnergyLevel = i_CurrentPercentOfElectricity * 1 / 100 * i_MaxBatterySize;
             if (currentEnergyLevel > i_MaxBatterySize)
             {
                 throw new ArgumentException("You entered more electricity than the maximum.");
             }
+
             Energy energyType = createEnergyByType(currentEnergyLevel, i_MaxBatterySize);
             return energyType;
         }
 
-        private static Energy createEnergySource(Dictionary<string, object> i_VehicleCharaterstic, float i_MaxTankSize, Fuel.eFuelType i_FuelType)
+        private static Energy createEnergySource(float i_CurrentPercentOfElectricity, float i_MaxTankSize, Fuel.eFuelType i_FuelType)
         {
-            float currentEnergyLevel = getFloatFromDict(i_VehicleCharaterstic, k_CurrentEnergyLevelKey);
-            if(currentEnergyLevel > i_MaxTankSize)
+            float currentEnergyLevel = i_CurrentPercentOfElectricity * 1 / 100 * i_MaxTankSize;
+            if (currentEnergyLevel > i_MaxTankSize)
             {
                 throw new ArgumentException("You entered more fuel than the maximum.");
             }
+
             Energy energyType = createEnergyByType(currentEnergyLevel, i_MaxTankSize, i_FuelType);
             return energyType;
         }
@@ -317,6 +336,11 @@ namespace Ex03.GarageLogic
                 if (airPressureInWheel > i_MaxAirPressureInWheel)
                 {
                     throw new ArgumentException("You entered more air pressure than the max!");
+                }
+
+                if(i_MaxAirPressureInWheel < 0)
+                {
+                    throw new ArgumentException("Air Pressure cannot be negative");
                 }
             }
 

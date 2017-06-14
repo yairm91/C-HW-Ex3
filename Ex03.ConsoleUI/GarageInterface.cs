@@ -89,7 +89,6 @@ To Quit enter: {7}",
             0));
         }
 
-
         internal static void ShowThisStringAsOutput(string i_TheStringToOutput)
         {
             Console.WriteLine(i_TheStringToOutput);
@@ -208,7 +207,7 @@ To Quit enter: {7}",
         private static string getStringWithLimitOnTheInputFromUser(string i_MessageToPrint, List<string> i_OptionalValues)
         {
             bool gotValidInput = false;
-            string inputFromUser = "";
+            string inputFromUser = string.Empty;
 
             while (!gotValidInput)
             {

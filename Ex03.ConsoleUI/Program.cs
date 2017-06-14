@@ -1,10 +1,10 @@
-﻿using Ex03.GarageLogic;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using Ex03.GarageLogic;
 
 namespace Ex03.ConsoleUI
 {
-    class Program
+    public class Program
     {
         public static void Main()
         {
@@ -50,9 +50,9 @@ namespace Ex03.ConsoleUI
 
                 currentChosenFunctionality = GarageInterface.GetFunctionalityFromUser();
             }
+
             GarageInterface.QuitProgramWithMessage();
         }
-
 
         private static void showFullDataOfVeichleByLicenseNumberOption(Garage i_ThisGarage)
         {
@@ -209,6 +209,7 @@ namespace Ex03.ConsoleUI
 
             return isInGarage;
         }
+
         internal enum eFunctionalityOptionsOfGarageProgram
         {
             QuitProgram,
@@ -220,6 +221,5 @@ namespace Ex03.ConsoleUI
             ChargeVeichleBasedOnElectricity,
             ShowFullDataOfVeichleByLicenseNumber
         }
-
     }
 }

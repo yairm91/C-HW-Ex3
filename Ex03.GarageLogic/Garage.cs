@@ -56,6 +56,16 @@ namespace Ex03.GarageLogic
             return wheelsInformation.ToString();
         }
 
+        private static void insertDefaultFieldsToList(List<string> parametersForTheUserAccordingToVehicleType)
+        {
+            parametersForTheUserAccordingToVehicleType.Add(GarageVehicle.k_OwnerNameKey);
+            parametersForTheUserAccordingToVehicleType.Add(GarageVehicle.k_OwnerPhoneNumberKey);
+            parametersForTheUserAccordingToVehicleType.Add(VeichleFactory.k_WheelMakerKey);
+            parametersForTheUserAccordingToVehicleType.Add(VeichleFactory.k_PercentOfEnergyLeftKey);
+            parametersForTheUserAccordingToVehicleType.Add(VeichleFactory.k_ModelNameKey);
+            parametersForTheUserAccordingToVehicleType.Add(VeichleFactory.k_CurrentPressureInWheelsKey);
+        }
+
         private static void getTruckInformation(GarageVehicle i_VehicleInGarageToWorkOn, StringBuilder i_VehicleSpecificInformation)
         {
             Truck ownerTruck = (Truck)i_VehicleInGarageToWorkOn.OwnerVehicle;
@@ -199,17 +209,6 @@ namespace Ex03.GarageLogic
             return parametersForTheUserAccordingToVehicleType;
         }
 
-        private static void insertDefaultFieldsToList(List<string> parametersForTheUserAccordingToVehicleType)
-        {
-            parametersForTheUserAccordingToVehicleType.Add(GarageVehicle.k_OwnerNameKey);
-            parametersForTheUserAccordingToVehicleType.Add(GarageVehicle.k_OwnerPhoneNumberKey);
-            parametersForTheUserAccordingToVehicleType.Add(VeichleFactory.k_WheelMakerKey);
-            parametersForTheUserAccordingToVehicleType.Add(VeichleFactory.k_PercentOfEnergyLeftKey);
-            parametersForTheUserAccordingToVehicleType.Add(VeichleFactory.k_ModelNameKey);
-            parametersForTheUserAccordingToVehicleType.Add(VeichleFactory.k_CurrentPressureInWheelsKey);
-            parametersForTheUserAccordingToVehicleType.Add(VeichleFactory.k_CurrentEnergyLevelKey);
-        }
-
         public bool IsVehicleInThisGarage(string i_VehicleLicenseNumber)
         {
             bool vechileInGarage = true;
@@ -230,11 +229,17 @@ namespace Ex03.GarageLogic
             Dictionary<string, object> parametersForEnergyCharging = new Dictionary<string, object>();
             parametersForEnergyCharging.Add(Energy.k_ValueType, Electric.k_EnergyType);
             parametersForEnergyCharging.Add(Energy.k_ValueToAdd, i_NumberOfHoursToCharge);
+            try
+            {
+                Electric ownerBattery = (Electric)ownerVehicle.OwnerVehicle.EnergyType;
 
-            Electric ownerBattery = (Electric)ownerVehicle.OwnerVehicle.EnergyType;
-
-            ownerVehicle.OwnerVehicle.EnergyType.AddEnergy(parametersForEnergyCharging);
-            ownerVehicle.OwnerVehicle.PercentOfEnergyLeft = calculateNewPrecanteOfEnergy(ownerBattery.MaxAmountOfEnergy, ownerBattery.CurrentAmountOfEnergy);
+                ownerVehicle.OwnerVehicle.EnergyType.AddEnergy(parametersForEnergyCharging);
+                ownerVehicle.OwnerVehicle.PercentOfEnergyLeft = calculateNewPrecanteOfEnergy(ownerBattery.MaxAmountOfEnergy, ownerBattery.CurrentAmountOfEnergy);
+            }
+            catch (InvalidCastException ex)
+            {
+                throw new ArgumentException("Wrong Energy Type!", ex);
+            }
         }
 
         public void FuelNumberOfLitersToFuelBasedVehicle(string i_VehicleLicenseNumber, string i_TypeOfFuel, float i_LitersOfFuelToFill)
@@ -308,7 +313,11 @@ namespace Ex03.GarageLogic
             catch (OverflowException ex)
             {
                 throw new FormatException("Wrong vehicle state", ex.InnerException);
-            }  
+            }
+            catch (ArgumentException ex)
+            {
+                throw new FormatException("Wrong vehicle state", ex.InnerException);
+            }
         }
 
         private void showAllVehiclesInGarage(StringBuilder i_ListOfVehiclesInGarage)
@@ -332,7 +341,7 @@ namespace Ex03.GarageLogic
 
             GarageVehicle newVehicleInGarage = new GarageVehicle(i_NewVehicleData[GarageVehicle.k_OwnerNameKey], i_NewVehicleData[GarageVehicle.k_OwnerPhoneNumberKey], ownerVehicle);
 
-            m_VehiclesInGarage.Add(i_NewVehicleData[k_LicenceNumberKey],newVehicleInGarage);
+            m_VehiclesInGarage.Add(i_NewVehicleData[k_LicenceNumberKey], newVehicleInGarage);
         }
 
         private void validateAndInsertToParametersDict(Dictionary<string, object> parametersForFactory, Dictionary<string, string> parametersFromUser, string key)
@@ -346,17 +355,15 @@ namespace Ex03.GarageLogic
                 }
                 catch (OverflowException)
                 {
-
                     throw new FormatException("Wrong Car Color");
-                }
-                
+                }      
             }
             else if (key.Equals(VeichleFactory.k_CurrentEnergyLevelKey)
                 || key.Equals(VeichleFactory.k_MaxCargoWeightForTruckKey) 
                 || key.Equals(VeichleFactory.k_PercentOfEnergyLeftKey))
             {
                 float newValueToEnterToDict;
-                bool didParseWork =  float.TryParse(parametersFromUser[key], out newValueToEnterToDict);
+                bool didParseWork = float.TryParse(parametersFromUser[key], out newValueToEnterToDict);
                 parametersForFactory.Add(key, newValueToEnterToDict);
                 if (!didParseWork)
                 {
@@ -376,9 +383,10 @@ namespace Ex03.GarageLogic
                     {
                         throw new ArgumentException(string.Format("Wrong {0} Type! Must be a Decimal Number!", key));
                     }
+
                     newValueToEnterToDict.Add(tempAirPressurePlaceHolder);
                 }
-         
+
                 parametersForFactory.Add(key, newValueToEnterToDict);
             }
             else if (key.Equals(VeichleFactory.k_EngineVolumeKey))
@@ -401,7 +409,8 @@ namespace Ex03.GarageLogic
                     throw new ArgumentException(string.Format("Wrong {0} Type! Must be an Integer Number!", key));
                 }
             }
-            else if (key.Equals(VeichleFactory.k_NumberOfDoorsInCarKey)){
+            else if (key.Equals(VeichleFactory.k_NumberOfDoorsInCarKey))
+            {
                 try
                 {
                     Car.eNumberOfDoors newValueToEnterToDict = (Car.eNumberOfDoors)Enum.Parse(typeof(Car.eNumberOfDoors), parametersFromUser[key]);
@@ -409,7 +418,6 @@ namespace Ex03.GarageLogic
                 }
                 catch (OverflowException)
                 {
-
                     throw new FormatException("Wrong Number Of Doors");
                 }
             }
@@ -422,7 +430,6 @@ namespace Ex03.GarageLogic
                 }
                 catch (OverflowException)
                 {
-
                     throw new FormatException("Wrong Licence Type");
                 }
             }
