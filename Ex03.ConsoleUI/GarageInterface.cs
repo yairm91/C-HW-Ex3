@@ -239,5 +239,12 @@ To Quit enter: {7}",
 
             return parametersForFactory;
         }
+
+        internal static void SendVeichleAlreadyInGarageAsOutput(string i_VehicleLicenseNumber)
+        {
+            Console.WriteLine(
+                "The veichle with license number: {0} is already in garage - change it's state to InRepair",
+                i_VehicleLicenseNumber);
+        }
     }
 }

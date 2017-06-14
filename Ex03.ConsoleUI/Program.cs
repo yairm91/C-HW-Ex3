@@ -83,6 +83,14 @@ namespace Ex03.ConsoleUI
                 {
                     GarageInterface.ShowThisStringAsOutput(argumentException.Message);
                 }
+                catch (ValueOutOfRangeException outOfRangeException)
+                {
+                    GarageInterface.ShowThisStringAsOutput(outOfRangeException.Message);
+                }
+                catch (FormatException formatException)
+                {
+                    GarageInterface.ShowThisStringAsOutput(formatException.Message);
+                }
             }
         }
 
@@ -99,6 +107,7 @@ namespace Ex03.ConsoleUI
                 {
                     io_ThisGarage.FuelNumberOfLitersToFuelBasedVehicle
                         (vehicleLicenseNumber, typeOfFuel, litersOfFuelToFill);
+                    GarageInterface.SendSucsses();
                 }
                 catch (FormatException formatException)
                 {
@@ -168,6 +177,8 @@ namespace Ex03.ConsoleUI
             if (io_ThisGarage.IsVehicleInThisGarage(vehicleLicenseNumber))
             {
                 io_ThisGarage.ChangeInGargeStateOfVehicle(vehicleLicenseNumber, k_InRepairState);
+                GarageInterface.SendVeichleAlreadyInGarageAsOutput(vehicleLicenseNumber);
+                GarageInterface.SendSucsses();
             }
             else
             {
