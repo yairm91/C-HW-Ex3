@@ -10,6 +10,7 @@ namespace Ex03.GarageLogic
         private const float k_MultiplyByHundredToTurnIntoPrecantage = 100;
         private const string k_HasDangerousCargoForTruck = "carries";
         private const string k_DoesNotHaveDangerousCargoForTruck = "does not carry";
+        private const string k_WrongVehicleStateMessege = "Wrong vehicle state - - possible values are InRepair, RepairDone or PaidFor";
         private readonly char[] k_SplitAccordingToThisDelimiter = { ',' };
         private Dictionary<string, GarageVehicle> m_VehiclesInGarage;
 
@@ -252,7 +253,7 @@ namespace Ex03.GarageLogic
             }
             catch (OverflowException ex)
             {
-                throw new FormatException("Wrong fuel type", ex.InnerException);
+                throw new FormatException("Wrong fuel type - possible values are Soler, Octan95, Octan96 or Octan98", ex.InnerException);
             }
 
             Dictionary<string, object> parametersForEnergyCharging = new Dictionary<string, object>();
@@ -276,7 +277,7 @@ namespace Ex03.GarageLogic
             }
             catch (OverflowException ex)
             {
-                throw new FormatException("Wrong vehicle state", ex.InnerException);
+                throw new FormatException(k_WrongVehicleStateMessege, ex.InnerException);
             }            
         }
 
@@ -312,11 +313,11 @@ namespace Ex03.GarageLogic
             }
             catch (OverflowException ex)
             {
-                throw new FormatException("Wrong vehicle state", ex.InnerException);
+                throw new FormatException(k_WrongVehicleStateMessege, ex.InnerException);
             }
             catch (ArgumentException ex)
             {
-                throw new FormatException("Wrong vehicle state", ex.InnerException);
+                throw new FormatException(k_WrongVehicleStateMessege, ex.InnerException);
             }
         }
 
@@ -355,7 +356,7 @@ namespace Ex03.GarageLogic
                 }
                 catch (OverflowException)
                 {
-                    throw new FormatException("Wrong Car Color");
+                    throw new FormatException("Wrong Car Color - possible values are Yellow, White, Black or Blue");
                 }      
             }
             else if (key.Equals(VeichleFactory.k_CurrentEnergyLevelKey)
@@ -406,7 +407,7 @@ namespace Ex03.GarageLogic
                 parametersForFactory.Add(key, newValueToEnterToDict);
                 if (!didParseWork)
                 {
-                    throw new ArgumentException(string.Format("Wrong {0} Type! Must be an Integer Number!", key));
+                    throw new ArgumentException(string.Format("Wrong {0} Type! Must be a true/false value", key));
                 }
             }
             else if (key.Equals(VeichleFactory.k_NumberOfDoorsInCarKey))
@@ -418,7 +419,7 @@ namespace Ex03.GarageLogic
                 }
                 catch (OverflowException)
                 {
-                    throw new FormatException("Wrong Number Of Doors");
+                    throw new FormatException("Wrong Number Of Doors - possible values are 2 3 4 or 5");
                 }
             }
             else if (key.Equals(VeichleFactory.k_TypeOfLicenceKey))
@@ -430,7 +431,7 @@ namespace Ex03.GarageLogic
                 }
                 catch (OverflowException)
                 {
-                    throw new FormatException("Wrong Licence Type");
+                    throw new FormatException("Wrong Licence Type - possible values are A AB A2 or B1");
                 }
             }
             else if (key.Equals(VeichleFactory.k_WheelMakerKey))
